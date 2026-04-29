@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Gwensas — Bitcoin Mining as a Service</title>
+<meta name="description" content="Gwensas heberge vos ASIC Bitcoin dans le Parc des Virunga, RDC - energie hydroelectrique a 0,047 kWh. 15% frais, transparence totale."/>
+<meta property="og:title" content="Gwensas - Bitcoin Mining as a Service"/>
+<meta property="og:type" content="website"/>
+<meta name="theme-color" content="#009FE3"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"/>
+<style>
+
+</style>
+<style>
+:root{
+  --blue:#009FE3; --blue-d:#0077CC; --blue-x:#005FA3;
+  --navy:#00294A; --navy2:#003D6B;
+  --green:#10B981; --green-d:#059669;
+  --orange:#F7931A;
+  --white:#FFFFFF; --off:#F4F8FC; --off2:#EBF4FC;
+  --text:#0A1628; --mid:#3D5A73; --dim:#4E6E85;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --ease2:cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--white);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--off)}::-webkit-scrollbar-thumb{background:var(--blue);border-radius:2px}
+
+/* ─ ANIMATIONS ───────────────────────────────── */
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.25;transform:scale(.4)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes gradFlow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes wipeRight{from{clip-path:polygon(0 0,0 0,0 100%,0 100%)}to{clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+@keyframes lineGrow{from{scaleY:0}to{scaleY:1}}
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+
+/* ─ REVEAL SYSTEM ────────────────────────────── */
+[data-a]{opacity:0;transition:opacity .75s var(--ease),transform .75s var(--ease)}
+[data-a="up"]{transform:translateY(36px)}
+[data-a="left"]{transform:translateX(-40px)}
+[data-a="right"]{transform:translateX(40px)}
+[data-a="scale"]{transform:scale(.92)}
+[data-a="fade"]{transform:none}
+[data-a].on{opacity:1;transform:none}
+[data-d="1"]{transition-delay:.1s}[data-d="2"]{transition-delay:.18s}[data-d="3"]{transition-delay:.26s}[data-d="4"]{transition-delay:.34s}[data-d="5"]{transition-delay:.42s}
+
+/* ─ LOADING ──────────────────────────────────── */
+#ldr{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .4s}
+.lring{width:28px;height:28px;border:2.5px solid var(--off2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}
+
+/* ─ TICKER ───────────────────────────────────── */
+#ticker{background:#030d18;height:40px;overflow:hidden;display:flex;align-items:center;position:fixed;top:0;left:0;right:0;z-index:60;border-bottom:1px solid rgba(0,159,227,.1)}
+.tk-track{display:flex;align-items:center;white-space:nowrap;animation:marquee 55s linear infinite}
+.tk-item{display:inline-flex;align-items:center;gap:7px;padding:0 22px;text-decoration:none;cursor:pointer;border-radius:0;transition:background .2s}
+.tk-item:hover{background:rgba(0,159,227,.08)}
+.tk-item:hover .tk-ext{opacity:1;transform:translateX(2px)}
+.tk-label{color:rgba(255,255,255,.6);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;font-family:'Inter',sans-serif}
+.tk-val{color:#fff;font-weight:600;font-size:12px;letter-spacing:.01em;font-family:'Inter',sans-serif}
+.tk-val.up{color:#4ade80}.tk-val.dn{color:#f87171}
+.tk-chg{font-size:10px;font-weight:600;font-family:'Inter',sans-serif}
+.tk-ext{font-size:9px;color:rgba(0,159,227,.5);opacity:0;transform:translateX(-2px);transition:opacity .2s,transform .2s;flex-shrink:0}
+.tk-sep{height:16px;width:1px;background:rgba(255,255,255,.08);flex-shrink:0}
+.tk-brand{color:var(--blue);font-family:'Inter',sans-serif;font-weight:700;font-size:11px;letter-spacing:.15em;text-transform:uppercase;margin:0 20px;padding:3px 10px;border:1px solid rgba(0,159,227,.2);border-radius:4px}
+
+/* ─ NAV ──────────────────────────────────────── */
+#nav{position:fixed;top:40px;left:0;right:0;z-index:50;padding:0 44px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,20,40,.75);backdrop-filter:blur(28px) saturate(180%);border-bottom:1px solid rgba(0,159,227,.15);box-shadow:0 1px 0 rgba(0,159,227,.08),inset 0 -1px 0 rgba(0,159,227,.05);transition:background .3s,box-shadow .3s}
+#nav::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,var(--blue) 30%,var(--orange) 70%,transparent 100%);opacity:0;transition:opacity .4s}
+#nav.sc{background:rgba(255,255,255,.97);box-shadow:0 1px 0 rgba(0,159,227,.1),0 8px 32px rgba(0,41,74,.07)}
+#nav.sc::after{opacity:1}
+.nav-logo-wrap{display:flex;align-items:center;cursor:pointer;text-decoration:none}
+.nav-logo-wrap:hover svg{filter:drop-shadow(0 0 8px rgba(0,159,227,.35))}
+.nav-logo-wrap svg{transition:filter .25s}
+.nav-mid{display:flex;align-items:center;gap:36px}
+.nav-mid a{font-size:11.5px;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:.1em;text-transform:uppercase;position:relative;padding:4px 0;transition:color .2s}
+.nav-mid a::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1.5px;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+.nav-mid a:hover{color:#fff}
+.nav-mid a:hover::after{transform:scaleX(1)}
+.nav-right{display:flex;align-items:center;gap:14px}
+
+.btn-nav{font-family:'Inter',sans-serif;font-weight:700;font-size:13px;padding:11px 26px;border-radius:100px;background:linear-gradient(135deg,var(--blue) 0%,var(--blue-x) 100%);color:#fff;display:inline-flex;align-items:center;gap:7px;letter-spacing:.02em;transition:transform .2s,box-shadow .2s;box-shadow:0 2px 14px rgba(0,159,227,.35),inset 0 1px 0 rgba(255,255,255,.15)}
+.btn-nav svg{transition:transform .2s}
+.btn-nav:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,159,227,.5),inset 0 1px 0 rgba(255,255,255,.15)}
+.btn-nav:hover svg{transform:translateX(3px)}
+
+/* ─ HERO ──────────────────────────────────────── */
+#hero{min-height:100vh;position:relative;background:#06101e;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:108px;overflow:hidden}
+#hero-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;will-change:transform;transform:translateZ(0)}
+.hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(0,159,227,.07) 0%,transparent 70%);z-index:1;pointer-events:none}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:940px;padding:0 40px 60px;display:flex;flex-direction:column;align-items:center}
+
+.hero-h{font-family:'Inter',sans-serif;font-weight:800;font-size:clamp(3rem,6.5vw,5.8rem);line-height:1.02;letter-spacing:-.022em;color:#fff;margin-bottom:24px;animation:fadeUp .75s var(--ease) .2s both}
+.hero-h em{color:var(--blue);font-style:normal}
+.hero-sub{font-size:17px;color:rgba(255,255,255,.58);line-height:1.75;max-width:560px;margin-bottom:42px;animation:fadeUp .75s var(--ease) .32s both}
+.hero-sub strong{color:rgba(0,159,227,.95);font-weight:600}
+.hero-btns{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:70px;animation:fadeUp .75s var(--ease) .44s both;justify-content:center}
+.btn-primary{font-family:'Inter',sans-serif;font-weight:700;font-size:15px;padding:15px 32px;border-radius:100px;background:linear-gradient(135deg,var(--blue) 0%,var(--blue-x) 100%);color:#fff;display:inline-flex;align-items:center;gap:9px;transition:transform .2s,box-shadow .2s;letter-spacing:.02em;box-shadow:0 4px 18px rgba(0,159,227,.4),inset 0 1px 0 rgba(255,255,255,.18)}
+.btn-primary svg{transition:transform .2s}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(0,159,227,.55),inset 0 1px 0 rgba(255,255,255,.18)}
+.btn-primary:hover svg{transform:translateX(4px)}
+.btn-ghost{font-family:'Inter',sans-serif;font-weight:600;font-size:15px;padding:15px 28px;border-radius:100px;color:rgba(255,255,255,.8);border:1.5px solid rgba(255,255,255,.18);backdrop-filter:blur(4px);transition:border-color .2s,color .2s,background .2s,transform .2s}
+.btn-ghost:hover{border-color:var(--blue);color:#fff;background:rgba(0,159,227,.1);transform:translateY(-2px)}
+.hero-stats{display:flex;animation:fadeUp .75s var(--ease) .56s both;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:24px 48px;backdrop-filter:blur(16px);gap:0}
+.h-stat{padding:0 36px}
+.h-stat:not(:last-child){border-right:1px solid rgba(255,255,255,.08)}
+.h-stat-val{font-family:'Inter',sans-serif;font-weight:800;font-size:30px;color:var(--blue);letter-spacing:-.03em}
+.h-stat-lbl{font-size:10px;color:rgba(255,255,255,.58);margin-top:5px;letter-spacing:.1em;text-transform:uppercase}
+.hero-scroll{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;animation:fadeUp .7s var(--ease) 1.4s both}
+.hero-scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,rgba(0,159,227,.8),transparent);animation:scrollPulse 2s ease-in-out infinite}
+.hero-scroll span{font-size:9px;color:rgba(255,255,255,.3);letter-spacing:.14em;text-transform:uppercase}
+@keyframes scrollPulse{0%,100%{opacity:.3}50%{opacity:.9}}
+.hero-badge{display:none}
+
+/* ─ TRUST ─────────────────────────────────────── */
+#trust{background:rgba(244,248,252,.8);backdrop-filter:blur(12px);padding:24px 72px;border-top:1px solid rgba(0,159,227,.06);border-bottom:1px solid rgba(0,159,227,.06);display:flex;align-items:center;gap:32px;flex-wrap:wrap}
+.trust-label{font-size:10.5px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;font-weight:600;flex-shrink:0}
+.trust-sep{width:1px;height:14px;background:rgba(0,41,74,.1);flex-shrink:0}
+.trust-logos{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+.trust-logos span{font-family:'Inter',sans-serif;font-weight:700;font-size:13px;color:rgba(0,41,74,.28);letter-spacing:.02em}
+
+/* ─ MANIFESTE ─────────────────────────────────── */
+#manifeste{padding:100px 72px;max-width:1100px;margin:0 auto}
+.manif-tag{font-size:11px;color:var(--blue);font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin-bottom:24px}
+.manif-h{font-family:'Inter',sans-serif;font-weight:800;font-size:clamp(2.4rem,5vw,4rem);line-height:1.07;letter-spacing:-.03em;color:var(--navy);max-width:800px;margin-bottom:24px}
+.manif-h span{color:var(--blue)}
+.manif-body{font-size:18px;color:var(--mid);line-height:1.72;max-width:620px}
+.manif-values{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:52px}
+.mv{padding:28px 24px;border-radius:16px;border:1.5px solid var(--off2);background:var(--white);transition:border-color .25s,transform .25s var(--ease),box-shadow .25s}
+.mv:hover{border-color:rgba(0,159,227,.4);transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,159,227,.15),0 0 0 1px rgba(0,159,227,.08),inset 0 1px 0 rgba(255,255,255,.95)}
+.mv-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:20px}
+.mv-h{font-family:'Inter',sans-serif;font-weight:700;font-size:16px;color:var(--navy);margin-bottom:8px}
+.mv-p{font-size:13.5px;color:var(--mid);line-height:1.65}
+
+/* ─ GRAND CHIFFRE ──────────────────────────────── */
+#kpi{background:var(--navy);padding:80px 72px;position:relative;overflow:hidden}
+.kpi-bg-text{position:absolute;font-family:'Inter',sans-serif;font-weight:800;font-size:22vw;color:rgba(0,159,227,.06);top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none;letter-spacing:-.04em;user-select:none}
+.kpi-inner{position:relative;z-index:1;text-align:center;margin-bottom:60px}
+.kpi-label{font-size:11px;color:rgba(255,255,255,.4);letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin-bottom:16px}
+.kpi-main{font-family:'Inter',sans-serif;font-weight:800;letter-spacing:-.04em;line-height:1;color:#fff}
+.kpi-main span{color:var(--blue)}
+.kpi-sub{font-size:17px;color:rgba(255,255,255,.5);margin-top:12px;font-weight:400}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.07);border-radius:16px;overflow:hidden;position:relative;z-index:1}
+.kpi-item{background:rgba(255,255,255,.04);backdrop-filter:blur(12px);padding:28px 20px;text-align:center;border:1px solid rgba(255,255,255,.07);transition:background .3s}
+.kpi-item-val{font-family:'Inter',sans-serif;font-weight:800;font-size:32px;color:#fff;letter-spacing:-.03em}
+.kpi-item-lbl{font-size:11px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:.1em;margin-top:6px}
+
+/* ─ HISTOIRE ───────────────────────────────────── */
+#histoire{padding:100px 72px;background:var(--white)}
+.hist-inner{max-width:1100px;margin:0 auto}
+.timeline{display:flex;align-items:flex-start;gap:0;margin:52px 0 72px;position:relative}
+.timeline::before{content:'';position:absolute;top:14px;left:24px;right:24px;height:2px;background:linear-gradient(to right,var(--blue),rgba(0,159,227,.15));z-index:0}
+.tl-item{flex:1;position:relative;z-index:1;text-align:center;padding:0 8px}
+.tl-dot{width:28px;height:28px;border-radius:50%;background:rgba(0,127,200,.7);backdrop-filter:blur(8px);border:2px solid rgba(255,255,255,.9);box-shadow:0 0 0 3px rgba(0,159,227,.2),0 0 16px rgba(0,159,227,.3);margin:0 auto 14px;display:flex;align-items:center;justify-content:center}
+.tl-dot-inner{width:8px;height:8px;border-radius:50%;background:#fff}
+.tl-year{font-family:'Inter',sans-serif;font-weight:800;font-size:16px;color:var(--blue);margin-bottom:6px}
+.tl-label{font-size:12px;color:var(--mid);line-height:1.4}
+.quote-block{background:var(--off);border-left:4px solid var(--blue);border-radius:0 16px 16px 0;padding:36px 44px;margin:0 0 56px;position:relative}
+.quote-mark{font-family:'Inter',sans-serif;font-size:80px;color:rgba(0,159,227,.15);line-height:0;position:absolute;top:24px;left:20px;font-weight:800}
+.quote-text{font-family:'Inter',sans-serif;font-size:clamp(1.1rem,2.2vw,1.55rem);font-weight:600;color:var(--navy);line-height:1.55;letter-spacing:-.02em;position:relative;z-index:1}
+.hist-paras{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:80px}
+.hist-para h3{font-family:'Inter',sans-serif;font-weight:700;font-size:17px;color:var(--navy);margin-bottom:10px;letter-spacing:-.01em}
+.hist-para p{font-size:15px;color:var(--mid);line-height:1.75}
+.projects-title{font-family:'Inter',sans-serif;font-weight:800;font-size:clamp(1.8rem,3.5vw,2.6rem);color:var(--navy);letter-spacing:-.03em;margin-bottom:8px;text-align:center}
+.projects-sub{font-size:16px;color:var(--mid);text-align:center;margin-bottom:44px}
+.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:auto auto;gap:16px}
+.proj-card{border-radius:20px;padding:28px 24px;border:1px solid rgba(0,159,227,.1);background:rgba(255,255,255,.7);backdrop-filter:blur(12px) saturate(150%);transition:transform .25s var(--ease),box-shadow .3s,border-color .3s;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 2px 16px rgba(0,41,74,.05),inset 0 1px 0 rgba(255,255,255,.95)}
+.proj-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent, var(--blue));border-radius:18px 18px 0 0}
+.proj-card:hover{transform:translateY(-8px);box-shadow:0 24px 56px rgba(0,159,227,.18),0 0 0 1px rgba(0,159,227,.12);border-color:rgba(0,159,227,.35)}
+.proj-card.wide{grid-column:span 2}
+.proj-icon{font-size:28px;margin-bottom:14px;display:block}
+.proj-tag{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent, var(--blue));margin-bottom:8px}
+.proj-h{font-family:'Inter',sans-serif;font-weight:700;font-size:17px;color:var(--navy);margin-bottom:8px;letter-spacing:-.01em}
+.proj-stat{font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--accent, var(--blue));margin-bottom:8px;letter-spacing:-.02em}
+.proj-p{font-size:13px;color:var(--mid);line-height:1.65}
+.proj-badge{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:600;color:var(--accent, var(--blue));background:rgba(0,159,227,.08);border:1px solid rgba(0,159,227,.18)}
+.impact-strip{margin-top:64px;padding:44px 40px;border-radius:20px;background:var(--navy);display:grid;grid-template-columns:repeat(5,1fr);gap:1px;overflow:hidden}
+.impact-strip>div+div{border-left:1px solid rgba(255,255,255,.1)}
+.impact-item{text-align:center;padding:12px 8px}
+.impact-val{font-family:'Inter',sans-serif;font-weight:800;font-size:24px;color:var(--blue);letter-spacing:-.02em;margin-bottom:6px}
+.impact-lbl{font-size:11px;color:rgba(255,255,255,.62);text-transform:uppercase;letter-spacing:.08em;line-height:1.4}
+
+/* ─ HOW IT WORKS ───────────────────────────────── */
+#how{padding:100px 72px;max-width:1100px;margin:0 auto}
+.how-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:64px;flex-wrap:wrap;gap:20px}
+.how-steps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;position:relative}
+.how-steps::before{content:'';position:absolute;top:24px;left:48px;right:48px;height:1px;background:linear-gradient(to right,var(--blue),rgba(0,159,227,.2));z-index:0}
+.how-step{padding:24px;position:relative;z-index:1;border-radius:16px;background:rgba(255,255,255,.6);backdrop-filter:blur(12px);border:1px solid rgba(0,159,227,.08);box-shadow:0 2px 16px rgba(0,41,74,.04),inset 0 1px 0 rgba(255,255,255,.9);transition:box-shadow .3s,transform .25s}
+.how-step-num{width:48px;height:48px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-weight:800;font-size:15px;color:#fff;margin-bottom:24px;flex-shrink:0;box-shadow:0 0 0 6px rgba(0,159,227,.12)}
+.how-step h3{font-family:'Inter',sans-serif;font-weight:700;font-size:19px;color:var(--navy);margin-bottom:10px;letter-spacing:-.01em}
+.how-step p{font-size:14.5px;color:var(--mid);line-height:1.7;margin-bottom:14px}
+.how-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:8px;background:var(--off2);border:1px solid rgba(0,159,227,.18)}
+.how-pill-dot{width:5px;height:5px;border-radius:50%;background:var(--blue)}
+.how-pill span{font-size:11.5px;color:var(--blue);font-weight:600}
+.how-photo{margin-top:56px;border-radius:20px;overflow:hidden;height:280px;position:relative}
+.how-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s var(--ease)}
+.how-photo:hover img{transform:scale(1.04)}
+.how-photo-overlay{position:absolute;inset:0;background:linear-gradient(to right,var(--navy) 0%,transparent 60%)}
+.how-photo-caption{position:absolute;left:28px;bottom:24px;right:40%}
+.how-photo-caption h4{font-family:'Inter',sans-serif;font-weight:700;font-size:18px;color:#fff;margin-bottom:4px}
+.how-photo-caption p{font-size:13px;color:rgba(255,255,255,.65);line-height:1.5}
+
+/* ─ VIRUNGA ────────────────────────────────────── */
+#virunga{position:relative;min-height:90vh;display:grid;grid-template-columns:1fr 1fr}
+.vir-left{background:var(--navy);padding:80px 64px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.vir-blob{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(0,159,227,.15) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:floatY 8s ease-in-out infinite;pointer-events:none}
+.vir-tag{font-size:11px;color:rgba(0,159,227,.9);font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin-bottom:20px;position:relative;z-index:1}
+.vir-h{font-family:'Inter',sans-serif;font-weight:800;font-size:clamp(2rem,3.5vw,3rem);line-height:1.08;letter-spacing:-.03em;color:#fff;margin-bottom:20px;position:relative;z-index:1}
+.vir-body{font-size:16px;color:rgba(255,255,255,.6);line-height:1.72;margin-bottom:32px;max-width:420px;position:relative;z-index:1}
+.vir-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;position:relative;z-index:1}
+.vir-stat{padding:18px 16px;border-radius:14px;background:rgba(255,255,255,.06);backdrop-filter:blur(12px);border:1px solid rgba(0,159,227,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.08);transition:background .3s,border-color .3s}
+.vir-stat-val{font-family:'Inter',sans-serif;font-weight:800;font-size:24px;color:var(--blue);letter-spacing:-.02em;margin-bottom:3px}
+.vir-stat-lbl{font-size:11.5px;color:rgba(255,255,255,.5);font-weight:500}
+.vir-stat-sub{font-size:10.5px;color:rgba(255,255,255,.5);margin-top:2px}
+.vir-right{position:relative;overflow:hidden}
+.vir-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 8s ease}
+.vir-img:hover{transform:scale(1.03)}
+.vir-img-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,41,74,.6) 0%,transparent 60%)}
+.green-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:24px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);margin-bottom:20px;position:relative;z-index:1}
+.green-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.8s infinite}
+.green-pill span{font-size:11px;color:var(--green);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+
+/* ─ PRICING ────────────────────────────────────── */
+#pricing{padding:100px 72px;background:var(--off)}
+.section-header{text-align:center;margin-bottom:56px}
+.s-tag{font-size:11px;color:var(--blue);font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px}
+.s-h{font-family:'Inter',sans-serif;font-weight:800;font-size:clamp(2rem,4vw,3rem);letter-spacing:-.018em;color:var(--navy);margin-bottom:10px}
+.s-sub{font-size:17px;color:var(--mid);max-width:480px;margin:0 auto;line-height:1.62}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:1040px;margin:0 auto}
+.plan{border-radius:20px;padding:32px 26px;background:rgba(255,255,255,.65);backdrop-filter:blur(20px) saturate(160%);border:1px solid rgba(0,159,227,.1);transition:transform .25s var(--ease),box-shadow .3s,border-color .3s;transform-style:preserve-3d;position:relative;box-shadow:0 4px 24px rgba(0,41,74,.06),inset 0 1px 0 rgba(255,255,255,.9)}
+.plan:hover{transform:translateY(-8px);box-shadow:0 24px 56px rgba(0,159,227,.2),inset 0 1px 0 rgba(255,255,255,.95);border-color:rgba(0,159,227,.3)}
+.plan.hi{background:rgba(0,127,200,.55);backdrop-filter:blur(20px) saturate(180%);border:1px solid rgba(0,159,227,.5);box-shadow:0 8px 32px rgba(0,159,227,.35),inset 0 1px 0 rgba(255,255,255,.2)}
+.plan.hi:hover{transform:translateY(-8px);box-shadow:0 24px 56px rgba(0,159,227,.4)}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);padding:4px 16px;border-radius:20px;background:var(--navy);font-family:'Inter',sans-serif;font-weight:700;font-size:11px;color:#fff;white-space:nowrap;letter-spacing:.04em}
+.plan-range{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.plan-range.hi{color:rgba(255,255,255,.6)}
+.plan-range.normal{color:var(--dim)}
+.plan-name{font-family:'Inter',sans-serif;font-weight:800;font-size:24px;letter-spacing:-.02em;margin-bottom:16px}
+.plan-name.hi{color:#fff}
+.plan-name.normal{color:var(--navy)}
+.plan-fee{font-family:'Inter',sans-serif;font-weight:800;font-size:40px;letter-spacing:-.03em;line-height:1}
+.plan-fee.hi{color:#fff}
+.plan-fee.normal{color:var(--navy)}
+.plan-fee-note{font-size:13px;margin-top:4px;margin-bottom:24px}
+.plan-fee-note.hi{color:rgba(255,255,255,.6)}
+.plan-fee-note.normal{color:var(--dim)}
+.plan-div{height:1px;margin-bottom:22px}
+.plan-div.hi{background:rgba(255,255,255,.15)}
+.plan-div.normal{background:rgba(0,41,74,.07)}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:28px;flex:1}
+.plan-feature{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;line-height:1.5}
+.plan-feature.hi{color:rgba(255,255,255,.85)}
+.plan-feature.normal{color:var(--mid)}
+.pf-dot{width:18px;height:18px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.pf-dot.hi{background:rgba(255,255,255,.15)}
+.pf-dot.normal{background:var(--off2)}
+.btn-plan{width:100%;padding:14px;border-radius:100px;font-family:'Inter',sans-serif;font-weight:700;font-size:14px;letter-spacing:.01em;transition:background .2s,transform .15s,box-shadow .2s}
+.btn-plan.hi{background:#fff;color:var(--blue)}
+.btn-plan.hi:hover{background:var(--off);transform:translateY(-1px);box-shadow:0 4px 12px rgba(255,255,255,.3)}
+.btn-plan.normal{background:var(--blue);color:#fff}
+.btn-plan.normal:hover{background:var(--blue-d);transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,159,227,.3)}
+.btn-plan.ghost{background:transparent;color:var(--navy);border:2px solid rgba(0,41,74,.12)}
+.btn-plan.ghost:hover{border-color:var(--blue);color:var(--blue)}
+
+/* ─ TRANSPARENCY ───────────────────────────────── */
+#transp{padding:80px 72px;max-width:1000px;margin:0 auto}
+.formula-wrap{background:rgba(244,248,252,.7);backdrop-filter:blur(16px) saturate(150%);border:1px solid rgba(0,159,227,.12);border-radius:24px;padding:44px 48px;box-shadow:0 4px 24px rgba(0,41,74,.05),inset 0 1px 0 rgba(255,255,255,.9)}
+.formula-tag{font-size:10.5px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.formula-code{font-family:'Inter',monospace;font-size:14px;line-height:2.1;color:var(--navy);background:var(--white);border:1px solid var(--off2);border-radius:12px;padding:24px 28px;margin:20px 0;overflow-x:auto}
+.f-hl{color:var(--blue);font-weight:700}
+.formula-div{height:1px;background:var(--off2);margin:16px 0}
+.f-result{color:var(--navy)}
+.f-result span{color:var(--blue);font-weight:700}
+.formula-params{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:24px}
+.fp{text-align:center;padding:16px;border-radius:12px;background:var(--white);border:1px solid var(--off2)}
+.fp-lbl{font-size:10px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.fp-val{font-family:'Inter',sans-serif;font-weight:700;font-size:13.5px;color:var(--navy)}
+
+/* ─ FAQ ────────────────────────────────────────── */
+#faq{padding:80px 72px;max-width:800px;margin:0 auto}
+.faq-list{}
+.faq-item{border-bottom:1px solid rgba(0,159,227,.08)}
+.faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;padding:22px 0;background:none;border:none;cursor:pointer;text-align:left;gap:16px}
+.faq-q-txt{font-family:'Inter',sans-serif;font-weight:600;font-size:16px;color:var(--navy);line-height:1.4}
+.faq-icon{width:28px;height:28px;border-radius:50%;background:var(--off2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s,transform .2s var(--ease)}
+.faq-item.open .faq-icon{background:var(--blue);transform:rotate(45deg)}
+.faq-icon svg{display:block}
+.faq-body{max-height:0;overflow:hidden;transition:max-height .35s var(--ease2)}
+.faq-body p{font-size:14.5px;color:var(--mid);line-height:1.78;padding-bottom:22px}
+
+/* ─ CTA ─────────────────────────────────────────── */
+#cta{padding:100px 72px;position:relative;overflow:hidden;background-size:200% 200%;background-image:linear-gradient(135deg,var(--navy) 0%,var(--blue-x) 40%,var(--navy2) 100%);animation:gradFlow 8s ease infinite}
+.cta-bg-txt{position:absolute;font-family:'Inter',sans-serif;font-weight:800;font-size:18vw;color:rgba(0,159,227,.06);bottom:-4vw;right:-2vw;white-space:nowrap;letter-spacing:-.04em;pointer-events:none;user-select:none}
+.cta-inner{max-width:720px;margin:0 auto;text-align:center;position:relative;z-index:1}
+.cta-tag{font-size:11px;color:rgba(0,159,227,.9);font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin-bottom:18px}
+.cta-h{font-family:'Inter',sans-serif;font-weight:800;font-size:clamp(2.4rem,5.5vw,4rem);letter-spacing:-.03em;line-height:1.07;color:#fff;margin-bottom:18px}
+.cta-sub{font-size:17px;color:rgba(255,255,255,.6);margin-bottom:44px;line-height:1.65}
+.cta-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-bottom:44px}
+.btn-cta-white{font-family:'Inter',sans-serif;font-weight:700;font-size:15px;padding:16px 32px;border-radius:100px;background:#fff;color:var(--blue);display:inline-flex;align-items:center;gap:8px;transition:background .2s,transform .15s,box-shadow .2s;letter-spacing:.01em}
+.btn-cta-white:hover{background:var(--off);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,255,255,.2)}
+.btn-cta-out{font-family:'Inter',sans-serif;font-weight:600;font-size:15px;padding:16px 28px;border-radius:100px;color:#fff;border:2px solid rgba(255,255,255,.25);transition:border-color .2s,background .2s,transform .15s}
+.btn-cta-out:hover{border-color:rgba(255,255,255,.6);background:rgba(255,255,255,.06);transform:translateY(-2px)}
+.cta-info{display:flex;flex-wrap:wrap;justify-content:center;gap:20px}
+.ci{display:flex;align-items:center;gap:6px}
+.ci-dot{width:4px;height:4px;border-radius:50%;background:var(--blue)}
+.ci-txt{font-size:12px;color:rgba(255,255,255,.55);font-weight:500}
+
+/* ─ FOOTER ──────────────────────────────────────── */
+#foot{background:var(--navy);padding:28px 52px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.foot-l{display:flex;align-items:center;gap:10px}
+.foot-badge{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--blue),var(--blue-x));display:flex;align-items:center;justify-content:center}
+.foot-badge span{font-family:'Inter',sans-serif;font-weight:800;color:#fff;font-size:11px}
+.foot-name{font-family:'Inter',sans-serif;font-weight:700;font-size:14px;color:rgba(255,255,255,.7)}
+.foot-legal{font-size:11px;color:rgba(255,255,255,.5)}
+.foot-links{display:flex;gap:18px}
+.foot-links a{font-size:11.5px;color:rgba(255,255,255,.5);transition:color .2s}
+.foot-links a:hover{color:rgba(255,255,255,.7)}
+
+/* ─ RESPONSIVE ──────────────────────────────────── */
+@media(max-width:900px){
+  #hero{grid-template-columns:1fr;min-height:auto}
+  .hero-right{height:55vw}
+  .hero-photo-clip{clip-path:none}
+  .hero-left{padding:40px 24px}
+  #nav{top:0;padding:0 20px}
+  #ticker{display:none}
+  .hero-stats{flex-wrap:wrap;gap:12px}
+  .hero-stats .h-stat{border:none;margin:0;padding:0}
+  #trust{padding:20px 24px}
+  #manifeste,.how-steps,#how,#virunga,#pricing,#transp,#faq,#cta,#foot{padding:60px 24px}
+  #manifeste{max-width:100%}
+  .manif-values{grid-template-columns:1fr}
+  #kpi{padding:60px 24px}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .how-steps{grid-template-columns:1fr;gap:16px}
+  .how-steps::before{display:none}
+  #virunga{grid-template-columns:1fr;min-height:auto}
+  .vir-right{height:60vw}
+  .vir-left{padding:48px 24px}
+  .pricing-grid{grid-template-columns:1fr;max-width:480px;margin:0 auto}
+  .formula-params{grid-template-columns:1fr 1fr}
+  .formula-wrap{padding:28px 20px}
+  #foot{flex-direction:column;text-align:center;padding:24px}
+  .foot-legal{order:3}.foot-links{order:2}
+  /* Histoire responsive */
+  #histoire{padding:60px 24px}
+  .timeline{flex-wrap:wrap;gap:16px}
+  .timeline::before{display:none}
+  .tl-item{flex:0 0 calc(50% - 8px);text-align:left;display:flex;align-items:flex-start;gap:10px}
+  .tl-dot{flex-shrink:0;margin:3px 0 0}
+  .hist-paras{grid-template-columns:1fr}
+  .projects-grid{grid-template-columns:1fr}
+  .proj-card.wide{grid-column:span 1}
+  .impact-strip{grid-template-columns:1fr 1fr;gap:0}
+  .impact-strip>div+div{border-left:none;border-top:1px solid rgba(255,255,255,.1)}
+  .quote-block{padding:24px 20px}
+}
+
+/* ── FINDING-001: Focus-visible (CRITICAL a11y) ─────────────── */
+:focus-visible{outline:2.5px solid var(--blue);outline-offset:3px;border-radius:4px}
+.btn-primary:focus-visible,.btn-ghost:focus-visible,.btn-nav:focus-visible,.btn-plan:focus-visible,.btn-cta-white:focus-visible,.btn-cta-out:focus-visible{outline:2.5px solid var(--blue);outline-offset:3px}
+.nav-mid a:focus-visible{outline:2px solid var(--blue);outline-offset:4px}
+.faq-q:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
+.mv:focus-visible,.proj-card:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+
+/* ── FINDING-016: Nav scrolled — white text on white bg fix ─── */
+#nav.sc .nav-mid a{color:var(--mid)}
+#nav.sc .nav-mid a:hover{color:var(--navy)}
+#nav.sc .nav-mid a.active{color:var(--blue)}
+
+/* ── FINDING-010: Scroll spy active state ───────────────────── */
+.nav-mid a.active{color:var(--blue)}
+.nav-mid a.active::after{transform:scaleX(1)}
+#nav.sc .nav-mid a.active::after{background:var(--blue)}
+
+/* ── FINDING-007: -webkit-backdrop-filter (Safari) ─────────── */
+#nav{-webkit-backdrop-filter:blur(28px) saturate(180%)}
+#nav.sc{-webkit-backdrop-filter:blur(24px) saturate(180%)}
+.hero-stats{-webkit-backdrop-filter:blur(16px)}
+.btn-ghost{-webkit-backdrop-filter:blur(4px)}
+.mv{-webkit-backdrop-filter:blur(16px) saturate(160%)}
+.proj-card{-webkit-backdrop-filter:blur(12px) saturate(150%)}
+.plan{-webkit-backdrop-filter:blur(20px) saturate(160%)}
+.plan.hi{-webkit-backdrop-filter:blur(20px) saturate(180%)}
+.formula-wrap{-webkit-backdrop-filter:blur(16px) saturate(150%)}
+.vir-stat{-webkit-backdrop-filter:blur(12px)}
+.kpi-item{-webkit-backdrop-filter:blur(12px)}
+.how-step{-webkit-backdrop-filter:blur(12px)}
+
+/* ── FINDING-014: Ticker pause on hover (WCAG 2.2.2) ───────── */
+#ticker:hover .tk-track{animation-play-state:paused}
+
+/* ── Skip link (FINDING-012 — in CSS) ──────────────────────── */
+.skip-link{position:fixed;top:-100%;left:16px;z-index:10000;padding:10px 18px;background:var(--blue);color:#fff;font-weight:700;border-radius:0 0 8px 8px;font-family:'Inter',sans-serif;font-size:14px;text-decoration:none;transition:top .2s}
+.skip-link:focus{top:0}
+
+/* ── FINDING-002: prefers-reduced-motion (CRITICAL) ─────────── */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  #hero-canvas{display:none}
+  .tk-track{animation:none;transform:none}
+  .hero-scroll-line{animation:none}
+  #cta{animation:none;background-image:linear-gradient(135deg,var(--navy) 0%,var(--blue-x) 40%,var(--navy2) 100%)}
+  [data-a]{opacity:1;transform:none;transition:none}
+}
+
+/* ── FINDING-020: Orphan mobile rules cleanup ───────────────── */
+/* Note: .hero-right, .hero-left, .hero-photo-clip rules in responsive are harmless no-ops — kept for safety */
+
+/* ── Extra polish: cta-sub readability ─────────────────────── */
+.cta-sub{color:rgba(255,255,255,.72)}
+
+
+/* touch-action */
+a,button,.mv,.proj-card,.plan,.faq-q{touch-action:manipulation}
+/* tabular nums */
+.h-stat-val,.kpi-item-val,.kpi-main,.impact-val,.vir-stat-val,.proj-stat,.tk-val{font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<a class="skip-link" href="#main-content">Aller au contenu</a>
+<div id="ldr"><div class="lring"></div></div>
+
+<!-- TICKER -->
+<div id="ticker">
+  <div class="tk-track" id="tk-track">
+    <!-- Content injected by JS -->
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="nav">
+  <a class="nav-logo-wrap" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" aria-label="Retour en haut">
+    <svg height="54" viewBox="0 0 240.9 153.1" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Gwensas" style="display:block;width:auto">
+      <path fill="#009FE3" d="M79.5,93.8l-4.8-20.7L54.7,84.7l5.6,2v8.1c-1.3,0.6-2.7,1-4.2,1.2c-1.5,0.3-3.1,0.4-4.8,0.4c-2.9,0-5.5-0.5-7.7-1.4c-2.3-0.9-4.2-2.2-5.7-3.8c-1.5-1.6-2.7-3.6-3.5-5.9c-0.8-2.3-1.2-4.8-1.2-7.5c0-2.7,0.4-5.1,1.3-7.4c0.9-2.3,2.1-4.2,3.6-5.9c1.6-1.6,3.4-2.9,5.5-3.8c2.1-0.9,4.4-1.4,6.9-1.4c2.9,0,5.5,0.5,7.8,1.5c2.3,1,4.1,2.4,5.5,4l9-10.3c-2.5-2.4-5.8-4.3-9.8-5.7c-4-1.4-8.4-2.1-13-2.1c-4.5,0-8.7,0.7-12.6,2.2c-3.9,1.5-7.3,3.5-10.2,6.2c-2.9,2.7-5.2,6-6.8,9.8c-1.6,3.8-2.5,8.1-2.5,12.9c0,4.7,0.8,8.9,2.4,12.7c1.6,3.8,3.9,7.1,6.7,9.8c2.9,2.7,6.3,4.8,10.3,6.4c4,1.5,8.3,2.3,13.1,2.3c4.6,0,8.8-0.5,12.7-1.4c3.9-0.9,7.3-2.2,10.2-3.7V91.6L79.5,93.8z"/>
+      <polygon fill="#838384" points="129.9,108.1 127.6,108.1 114,62.6 113.9,62.6 100.6,108.1 98.4,108.1 84.3,61.2 85.9,61.2 99.4,106.8 99.6,106.8 112.9,61.2 115.1,61.2 128.7,106.8 128.9,106.8 142.4,61.2 143.9,61.2"/>
+      <polygon fill="#838384" points="152.8,108.1 152.8,61.2 180.1,61.2 180.1,62.6 154.2,62.6 154.2,83.1 178.6,83.1 178.6,84.5 154.2,84.5 154.2,106.8 181.1,106.8 181.1,108.1"/>
+      <polygon fill="#838384" points="227.1,108.1 193.5,63.1 193.3,63.1 193.3,108.1 191.8,108.1 191.8,61.2 193.9,61.2 227.5,106.2 227.7,106.2 227.7,61.2 229.2,61.2 229.2,108.1"/>
+    </svg>
+  </a>
+  <nav class="nav-mid">
+    <a href="#manifeste">Mission</a>
+    <a href="#how">Comment</a>
+    <a href="#virunga">Fermes</a>
+    <a href="#pricing">Tarifs</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+  <div class="nav-right">
+    <a href="#cta" class="btn-nav">
+      Démarrer
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero" tabindex="-1">
+  <canvas id="hero-canvas" role="img" aria-label="Animation : réseau de mineurs Bitcoin interconnectés"></canvas>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="hero-h">Gwensas rend le minage<br>de Bitcoin <em>accessible à tous.</em></h1>
+    <p class="hero-sub">Produisez vos ₿itcoin au lieu de les acheter — énergie hydroélectrique à <strong>0,047 €/kWh</strong> dans le Parc des Virunga. De l'équipement à l'hébergement, on s'occupe de tout.</p>
+    <div class="hero-btns">
+      <a href="#cta" class="btn-primary">
+        Démarrer l’hébergement
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <a href="#how" class="btn-ghost">Comment ça marche ?</a>
+    </div>
+    <div class="hero-stats">
+      <div class="h-stat"><div class="h-stat-val" data-count="5" data-suffix="+ MW">0</div><div class="h-stat-lbl">Puissance</div></div>
+      <div class="h-stat"><div class="h-stat-val" data-count="7" data-suffix=" ans">0</div><div class="h-stat-lbl">D’expérience</div></div>
+      <div class="h-stat"><div class="h-stat-val" data-count="100" data-suffix="+">0</div><div class="h-stat-lbl">Clients actifs</div></div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span>Découvrir</span>
+  </div>
+</section>
+
+<!-- TRUST -->
+<main id="main-content">
+<div id="trust" data-a="fade">
+  <span class="trust-label">Ils en parlent</span>
+  <div class="trust-sep"></div>
+  <div class="trust-logos">
+    <span>Maddyness</span><span>Le Figaro</span><span>Bitcoin.fr</span><span>Coin24</span><span>Bitstack</span><span>BFM Business</span>
+  </div>
+</div>
+
+<!-- MANIFESTE -->
+<section id="manifeste">
+  <div data-a="up"><p class="manif-tag">Notre mission</p></div>
+  <h2 class="manif-h" data-a="up" data-d="1">Vous ne payez pas pour du Bitcoin.<br><span>Vous le produisez.</span></h2>
+  <p class="manif-body" data-a="up" data-d="2">Acheter du Bitcoin au cours du marché, c'est subir la volatilité. Produire du Bitcoin à 0,047 €/kWh dans les Virunga, c'est construire une position avec un coût de revient structurellement inférieur au cours. C'est le principe de Gwensas depuis 2017.</p>
+  <div class="manif-values">
+    <div class="mv" data-a="up" data-d="2">
+      <div class="mv-icon" style="background:rgba(0,159,227,.1)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13 2L4.5 13.5H11L9 22L19.5 10.5H13Z" fill="rgba(247,147,26,.8)" stroke="#F7931A" stroke-width="1" stroke-linejoin="round"/><circle cx="12" cy="12" r="10" stroke="rgba(247,147,26,.2)" stroke-width="1" fill="none" stroke-dasharray="4 3"/></svg></div>
+      <h3 class="mv-h">Énergie verte, coût minimal</h3>
+      <p class="mv-p">Hydroélectrique locale dans le Parc des Virunga. Zéro charbon. 0,047 €/kWh — le prix qui change tout dans l'équation du minage.</p>
+    </div>
+    <div class="mv" data-a="up" data-d="3">
+      <div class="mv-icon" style="background:rgba(16,185,129,.1)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="rgba(16,185,129,.12)" stroke="#10B981" stroke-width="1.3"/><ellipse cx="12" cy="12" rx="4.5" ry="9" stroke="rgba(16,185,129,.4)" stroke-width="1" fill="none"/><line x1="3" y1="12" x2="21" y2="12" stroke="rgba(16,185,129,.4)" stroke-width="1"/><circle cx="14" cy="13" r="2.5" fill="#10B981" opacity="0.5"/></svg></div>
+      <h3 class="mv-h">Mining qui fait sens</h3>
+      <p class="mv-p">Valoriser des énergies locales sous-exploitées, soutenir les économies rurales au Congo, produire du Bitcoin avec un bilan carbone minimal.</p>
+    </div>
+    <div class="mv" data-a="up" data-d="4">
+      <div class="mv-icon" style="background:rgba(247,147,26,.1)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><line x1="4" y1="4" x2="4" y2="20" stroke="rgba(0,159,227,.3)" stroke-width="1"/><line x1="4" y1="20" x2="20" y2="20" stroke="rgba(0,159,227,.3)" stroke-width="1"/><rect x="6" y="13" width="4" height="7" rx="1" fill="#009FE3" opacity="0.6"/><rect x="11" y="9" width="4" height="11" rx="1" fill="#009FE3" opacity="0.8"/><rect x="16" y="5" width="4" height="15" rx="1" fill="#F7931A" opacity="0.9"/></svg></div>
+      <h3 class="mv-h">Transparence totale</h3>
+      <p class="mv-p">Formule publique, données réseau vérifiables, newsletter mensuelle avec tous les calculs. Rien à cacher — depuis 7 ans.</p>
+    </div>
+  </div>
+</section>
+
+<!-- KPI -->
+<section id="kpi">
+  <div class="kpi-bg-text">0,047€</div>
+  <div class="kpi-inner" data-a="fade">
+    <p class="kpi-label">Le chiffre qui change tout</p>
+    <div class="kpi-main" style="font-size:clamp(4rem,12vw,9rem)"><span>0,047</span> €/kWh</div>
+    <p class="kpi-sub">Coût de l'électricité dans nos fermes — contre ~0,15–0,25 € en Europe</p>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi-item" data-a="up" data-d="1"><div class="kpi-item-val" data-count="5" data-suffix="+ MW">0</div><div class="kpi-item-lbl">Puissance déployée</div></div>
+    <div class="kpi-item" data-a="up" data-d="2"><div class="kpi-item-val" data-count="7" data-suffix=" ans">0</div><div class="kpi-item-lbl">D'expérience</div></div>
+    <div class="kpi-item" data-a="up" data-d="3"><div class="kpi-item-val" data-count="100" data-suffix="+">0</div><div class="kpi-item-lbl">Clients actifs</div></div>
+    <div class="kpi-item" data-a="up" data-d="4"><div class="kpi-item-val" data-count="15" data-suffix="%">0</div><div class="kpi-item-lbl">Frais de gestion</div></div>
+  </div>
+</section>
+
+<!-- HISTOIRE -->
+<section id="histoire">
+<div class="hist-inner">
+  <div data-a="up">
+    <p class="s-tag" style="text-align:left;margin-bottom:12px">Une aventure humaine</p>
+    <h2 style="font-family:'Inter',sans-serif;font-weight:800;font-size:clamp(2rem,4.5vw,3.2rem);letter-spacing:-.03em;color:var(--navy);max-width:700px;line-height:1.06;margin-bottom:0">
+      Depuis 2012, nous construisons<br><span style="color:var(--blue)">quelque chose d'extraordinaire.</span>
+    </h2>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="timeline" data-a="up" data-d="1">
+    <div class="tl-item"><div class="tl-dot"><div class="tl-dot-inner"></div></div><div class="tl-year">2012</div><div class="tl-label">Premier Bitcoin<br>miné sur CPU</div></div>
+    <div class="tl-item"><div class="tl-dot"><div class="tl-dot-inner"></div></div><div class="tl-year">2017</div><div class="tl-label">Fondation<br>Gwensas</div></div>
+    <div class="tl-item"><div class="tl-dot"><div class="tl-dot-inner"></div></div><div class="tl-year">2020</div><div class="tl-label">Ferme Virunga<br>opérationnelle</div></div>
+    <div class="tl-item"><div class="tl-dot"><div class="tl-dot-inner"></div></div><div class="tl-year">2024</div><div class="tl-label">Valorisation<br>chaleur ASIC</div></div>
+    <div class="tl-item" style="--tl-active:1"><div class="tl-dot" style="background:var(--green);box-shadow:0 0 0 3px rgba(16,185,129,.25)"><div class="tl-dot-inner"></div></div><div class="tl-year" style="color:var(--green)">Aujourd'hui</div><div class="tl-label">14+ projets<br>en expansion</div></div>
+  </div>
+
+  <!-- QUOTE -->
+  <div class="quote-block" data-a="up" data-d="1">
+    <div class="quote-mark">"</div>
+    <p class="quote-text">Gwensas n'est pas née pour faire du mining. Elle est née parce que nous voulions que tout le monde puisse participer à la révolution Bitcoin — sans complexité technique, sans infrastructure, sans barrière. Et parce qu'au Congo, nous avons découvert que le mining pouvait faire infiniment plus que produire des satoshis.</p>
+  </div>
+
+  <!-- PARAGRAPHES -->
+  <div class="hist-paras">
+    <div class="hist-para" data-a="left">
+      <h3>14 ans de passion ininterrompue</h3>
+      <p>En 2012, quand Thomas lance son premier minage sur CPU, Bitcoin n'intéresse personne. Mais quelque chose d'évident s'impose : cette technologie va changer le rapport au capital, à l'énergie, à la confiance. Il n'a jamais arrêté depuis. Passé des CPUs aux ASICs, des fermes personnelles aux infrastructures multi-MW, d'une chambre à un datacenter dans l'un des parcs naturels les plus extraordinaires du monde.</p>
+    </div>
+    <div class="hist-para" data-a="right">
+      <h3>Démocratiser le mining — la mission de Gwensas</h3>
+      <p>Pourquoi laisser cette opportunité aux seuls industriels ? Avec Adrien, Thomas a construit un modèle simple et transparent : vous achetez la machine, Gwensas l'opère dans ses fermes hydroélectriques au Congo, vous percevez le Bitcoin produit chaque mois sur votre wallet. Aucune barrière technique. Une seule règle : la transparence totale sur chaque satoshi produit.</p>
+    </div>
+    <div class="hist-para" data-a="left">
+      <h3>L'énergie qui ne se perd pas</h3>
+      <p>Dans le Parc des Virunga, l'eau des montagnes génère une électricité presque gratuite. Chaque ASIC mine du Bitcoin. Et chaque ASIC produit aussi de la chaleur — 50°C en continu, 24h/24. Cette chaleur ne se gaspille pas. Elle sèche le cacao de Mutwanga, préserve la récolte de blé à Lubero, fait vivre des femmes entrepreneures à Goma, et deviendra bientôt des confiseries fonctionnelles vendues dans le monde entier.</p>
+    </div>
+    <div class="hist-para" data-a="right">
+      <h3>Un modèle qui fait la preuve que ça marche</h3>
+      <p>Coût de production : 25 000–30 000$/BTC (contre 42 000$ pour l'industrie mondiale). Énergie : 100% hydroélectrique renouvelable. Impact : emplois locaux, séchage agricole, formation, économie circulaire. Le mining de Gwensas n'est pas seulement rentable — il prouve qu'une entreprise peut être à la fois à la pointe de la technologie, respectueuse de l'environnement, et moteur de développement humain réel.</p>
+    </div>
+  </div>
+
+  <!-- PROJETS -->
+  <div data-a="up">
+    <h2 class="projects-title">Quand le Bitcoin devient moteur du monde réel.</h2>
+    <p class="projects-sub">La chaleur de vos machines ne se gaspille pas. Elle nourrit, sèche, crée, construit.</p>
+  </div>
+
+  <div class="projects-grid" data-a="up" data-d="1">
+
+    <div class="proj-card wide" style="--accent:#009FE3;background:linear-gradient(135deg,#EBF6FD 0%,#fff 60%)">
+      <span class="proj-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M13 2L4 13h7L9 22 20 11h-7z" fill="#009FE3"/></svg></span>
+      <p class="proj-tag">Bitcoin Mining</p>
+      <h3 class="proj-h">Virunga · Matebe · Ivingu · Inga</h3>
+      <div class="proj-stat">14+ MW déployés</div>
+      <p class="proj-p">Fermes hydroélectriques 100% renouvelables dans le Parc National des Virunga. 26 containers HK3 V6 en refroidissement liquide. Coût de production parmi les plus bas au monde — $25-30k/BTC contre $42k pour l'industrie. C'est la base. Ce qui suit est encore plus extraordinaire.</p>
+      <div class="proj-badge">0,047 €/kWh · Nord-Kivu · RDC</div>
+    </div>
+
+    <div class="proj-card" style="--accent:#8B5CF6">
+      <span class="proj-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="8" width="18" height="11" rx="3" fill="rgba(139,92,246,.2)" stroke="#8B5CF6" stroke-width="1.3"/><line x1="9" y1="8" x2="9" y2="19" stroke="#8B5CF6" stroke-width="1" opacity="0.5"/><line x1="15" y1="8" x2="15" y2="19" stroke="#8B5CF6" stroke-width="1" opacity="0.5"/><line x1="3" y1="13" x2="21" y2="13" stroke="#8B5CF6" stroke-width="1" opacity="0.5"/><path d="M9 5 C9 3 11 2 12 2 C13 2 15 3 15 5" stroke="#8B5CF6" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg></span>
+      <p class="proj-tag">Séchage Cacao · Mutwanga</p>
+      <h3 class="proj-h">CryptoChocolat</h3>
+      <div class="proj-stat">6,8 t/jour</div>
+      <p class="proj-p">658 kW de chaleur ASIC sèchent les fèves de cacao cultivées au pied des volcans. Le séchoir Alvan Blanch BD5000, financé EU/Virunga Foundation, transforme chaque récolte en cacao premium traçable.</p>
+      <div class="proj-badge">Mutwanga · Virunga Origins</div>
+    </div>
+
+    <div class="proj-card" style="--accent:#F59E0B">
+      <span class="proj-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><line x1="12" y1="21" x2="12" y2="5" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round"/><ellipse cx="9" cy="11" rx="2.5" ry="4" transform="rotate(-20 9 11)" fill="rgba(245,158,11,.25)" stroke="#F59E0B" stroke-width="1"/><ellipse cx="15" cy="11" rx="2.5" ry="4" transform="rotate(20 15 11)" fill="rgba(245,158,11,.25)" stroke="#F59E0B" stroke-width="1"/><ellipse cx="12" cy="8" rx="2" ry="3.5" fill="rgba(245,158,11,.3)" stroke="#F59E0B" stroke-width="1"/></svg></span>
+      <p class="proj-tag">Séchage Blé & Grain · Lubero</p>
+      <h3 class="proj-h">Magic Box Grain</h3>
+      <div class="proj-stat">+10 000 t/saison</div>
+      <p class="proj-p">180 Whatsminer M50S dans un container 20' génèrent 590 kW et 72 000 m³/h d'air chaud. Assez pour sécher plus de 10 000 tonnes de grain par saison — sécurité alimentaire locale et revenus agricoles multipliés.</p>
+      <div class="proj-badge">590 kW · Lubero · Nord-Kivu</div>
+    </div>
+
+    <div class="proj-card" style="--accent:#10B981">
+      <span class="proj-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polygon points="12,3 20,9 17,20 7,20 4,9" fill="rgba(16,185,129,.18)" stroke="#10B981" stroke-width="1.3" stroke-linejoin="round"/><polygon points="12,3 20,9 12,9 4,9" fill="rgba(16,185,129,.3)" stroke="none"/><line x1="4" y1="9" x2="20" y2="9" stroke="#10B981" stroke-width="0.8" opacity="0.5"/><line x1="12" y1="3" x2="12" y2="9" stroke="#10B981" stroke-width="0.8" opacity="0.4"/></svg></span>
+      <p class="proj-tag">Économie Circulaire</p>
+      <h3 class="proj-h">CryptoSweet</h3>
+      <div class="proj-stat">4 gammes</div>
+      <p class="proj-p">Confiseries naturelles aux champignons médicinaux (Cordyceps, Lion's Mane, Reishi, Ergothionéine) + fruits locaux séchés à la chaleur des ASIC. Traçabilité blockchain. Zéro sucre ajouté. Marché international.</p>
+      <div class="proj-badge">Energy · Focus · Relax · Immunité</div>
+    </div>
+
+    <div class="proj-card" style="--accent:#EF4444">
+      <span class="proj-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="9" cy="6" r="3" fill="rgba(239,68,68,.2)" stroke="#EF4444" stroke-width="1.2"/><circle cx="16" cy="7" r="2.5" fill="rgba(239,68,68,.15)" stroke="#EF4444" stroke-width="1" opacity="0.7"/><path d="M3 20 C3 16 6 14 9 14 C12 14 15 16 15 20" stroke="#EF4444" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M15 18 C15 16 17 15 19 15 C21 15 22 16 22 18" stroke="#EF4444" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.6"/></svg></span>
+      <p class="proj-tag">Entrepreneuriat Féminin · Goma</p>
+      <h3 class="proj-h">Crypto Drying</h3>
+      <div class="proj-stat">10 femmes</div>
+      <p class="proj-p">16 Antminer S9 en fin de vie reconvertis en séchoirs communautaires à l'Université de Goma (UNIGOM). 10 femmes du Fonds Hodari gagnent $154-192/mois en séchant mangues, moringa, ananas — des revenus ×19 le salaire minimum RDC.</p>
+      <div class="proj-badge">UNIGOM · Fonds Hodari · BridgeSats</div>
+    </div>
+
+    <div class="proj-card" style="--accent:#0D9488">
+      <span class="proj-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 21 C6 21 8 13 14 10 C20 7 21 3 21 3 C21 3 17 5 13 9 C9 13 6 21 6 21 Z" fill="rgba(13,148,136,.2)" stroke="#0D9488" stroke-width="1.2" stroke-linejoin="round"/><path d="M6 21 L14 11" stroke="#0D9488" stroke-width="1" stroke-linecap="round" opacity="0.5"/><circle cx="8" cy="18" r="1" fill="#0D9488" opacity="0.4"/></svg></span>
+      <p class="proj-tag">Plantes Médicinales & Bois</p>
+      <h3 class="proj-h">Artemisia & Eucalyptus</h3>
+      <div class="proj-stat">En développement</div>
+      <p class="proj-p">Séchage d'artemisia annua (plante antipaludéenne) et traitement de poteaux d'eucalyptus pour la construction locale. Chaque watt de chaleur crée de la valeur — santé, construction, réseau territorial.</p>
+      <div class="proj-badge">Réseau Nord-Kivu · Impact santé</div>
+    </div>
+
+  </div>
+
+  <!-- IMPACT STRIP -->
+  <div class="impact-strip" data-a="up" data-d="2">
+    <div class="impact-item"><div class="impact-val">2012</div><div class="impact-lbl">Début du<br>mining Bitcoin</div></div>
+    <div class="impact-item"><div class="impact-val">6,8 t</div><div class="impact-lbl">Cacao séché<br>par jour</div></div>
+    <div class="impact-item"><div class="impact-val">10</div><div class="impact-lbl">Femmes<br>entrepreneures</div></div>
+    <div class="impact-item"><div class="impact-val">+10 000 t</div><div class="impact-lbl">Grain séché<br>par saison</div></div>
+    <div class="impact-item"><div class="impact-val">0 déchet</div><div class="impact-lbl">Énergie<br>gaspillée</div></div>
+  </div>
+
+</div>
+</section>
+
+<!-- HOW -->
+<section id="how">
+  <div class="how-header">
+    <div>
+      <div data-a="up"><p class="s-tag" style="text-align:left;margin-bottom:10px">Comment ça marche</p></div>
+      <h2 class="s-h" style="text-align:left;font-size:clamp(1.8rem,3.5vw,2.8rem)" data-a="up" data-d="1">Vous achetez la machine.<br>Nous faisons le reste.</h2>
+    </div>
+    <a href="#cta" class="btn-primary" data-a="right" style="flex-shrink:0;height:fit-content">Commencer →</a>
+  </div>
+  <div class="how-steps">
+    <div class="how-step" data-a="up" data-d="1">
+      <div class="how-step-num">01</div>
+      <h3>Choisissez votre machine</h3>
+      <p>Antminer S19/S21 ou Whatsminer M50. On calcule ensemble budget, hashrate visé et estimation mensuelle de production.</p>
+      <div class="how-pill"><div class="how-pill-dot"></div><span>Devis en 24h</span></div>
+    </div>
+    <div class="how-step" data-a="up" data-d="2">
+      <div class="how-step-num">02</div>
+      <h3>Nous déployons</h3>
+      <p>Transport, dédouanement, installation, configuration réseau et monitoring 24/7. En production sous 3 à 4 semaines.</p>
+      <div class="how-pill"><div class="how-pill-dot"></div><span>Maintenance incluse</span></div>
+    </div>
+    <div class="how-step" data-a="up" data-d="3">
+      <div class="how-step-num">03</div>
+      <h3>Vous percevez</h3>
+      <p>Entre le 5 et le 10 du mois, le Bitcoin net est versé directement sur votre wallet. Récapitulatif complet fourni.</p>
+      <div class="how-pill"><div class="how-pill-dot"></div><span>100% non-custodial</span></div>
+    </div>
+  </div>
+  <div class="how-photo" data-a="up" data-d="2">
+    <img src="https://static.wixstatic.com/media/726bef_fd42fb06d27f4c51953fa585aec27c5c~mv2.jpg/v1/fill/w_1200,h_340,al_c,q_85,usm_0.33_1.00_0.00,enc_auto/726bef_fd42fb06d27f4c51953fa585aec27c5c~mv2.jpg"
+         alt="Infrastructure Gwensas Mining"
+         onerror="this.parentElement.style.background='var(--navy)'"/>
+    <div class="how-photo-overlay"></div>
+    <div class="how-photo-caption">
+      <h4>Ferme Virunga — Nord-Kivu, RDC</h4>
+      <p>Énergie hydroélectrique locale · 26 containers · Opérationnel depuis 2020</p>
+    </div>
+  </div>
+</section>
+
+<!-- VIRUNGA -->
+<!-- aria-label added for screen reader landmark -->
+<section id="virunga">
+  <div class="vir-left">
+    <div class="vir-blob"></div>
+    <div class="green-pill" data-a="fade">
+      <div class="green-pill-dot"></div>
+      <span>Énergie 100% renouvelable</span>
+    </div>
+    <p class="vir-tag" data-a="up">Parc National des Virunga · Nord-Kivu · RDC</p>
+    <h2 class="vir-h" data-a="up" data-d="1">La ferme la plus singulière du monde.</h2>
+    <p class="vir-body" data-a="up" data-d="2">Pas un datacenter de périphérie. Une centrale hydroélectrique nichée dans l'un des derniers sanctuaires naturels de la planète — à 1 500 mètres d'altitude, au pied des volcans du Virunga. L'eau descend des montagnes. Vos machines produisent du Bitcoin. L'énergie ne coûte presque rien. L'empreinte carbone est quasi nulle.</p>
+    <div class="vir-stat-grid" data-a="up" data-d="3">
+      <div class="vir-stat"><div class="vir-stat-val">0,047€</div><div class="vir-stat-lbl">Par kWh</div><div class="vir-stat-sub">Le moins cher du secteur</div></div>
+      <div class="vir-stat"><div class="vir-stat-val">5+ MW</div><div class="vir-stat-lbl">Puissance</div><div class="vir-stat-sub">26 containers HK3 V6</div></div>
+      <div class="vir-stat"><div class="vir-stat-val">100%</div><div class="vir-stat-lbl">Énergie verte</div><div class="vir-stat-sub">Hydro locale</div></div>
+      <div class="vir-stat"><div class="vir-stat-val">2020</div><div class="vir-stat-lbl">En production</div><div class="vir-stat-sub">4 ans terrain</div></div>
+    </div>
+  </div>
+  <div class="vir-right" data-a="right">
+    <img class="vir-img"
+         src="https://static.wixstatic.com/media/726bef_6cfafd20f3dc48f88289e9a48c0f3be5~mv2.jpg/v1/fill/w_900,h_900,al_c,q_85,usm_0.33_1.00_0.00,enc_auto/726bef_6cfafd20f3dc48f88289e9a48c0f3be5~mv2.jpg"
+         alt="Virunga National Park"
+         onerror="this.src='https://static.wixstatic.com/media/726bef_ee14da7cab2847f3b01bc8122c25bc59~mv2.jpeg/v1/fill/w_900,h_900,al_c,q_85,enc_auto/726bef_ee14da7cab2847f3b01bc8122c25bc59~mv2.jpeg'"/>
+    <div class="vir-img-overlay"></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-header" data-a="up">
+    <p class="s-tag">Tarifs</p>
+    <h2 class="s-h">Un modèle de frais. Trois niveaux d'accompagnement.</h2>
+    <p class="s-sub">Production brute − électricité − frais Gwensas = Bitcoin sur votre wallet.</p>
+  </div>
+  <div class="pricing-grid">
+
+    <div class="plan" data-a="up" data-d="1" data-tilt>
+      <p class="plan-range normal">1 à 5 ASIC</p>
+      <h3 class="plan-name normal">Starter</h3>
+      <div class="plan-fee normal">15%</div>
+      <p class="plan-fee-note normal">sur la production nette</p>
+      <div class="plan-div normal"></div>
+      <ul class="plan-features">
+        <li class="plan-feature normal"><span class="pf-dot normal"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Hébergement ferme Virunga</li>
+        <li class="plan-feature normal"><span class="pf-dot normal"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Newsletter mensuelle</li>
+        <li class="plan-feature normal"><span class="pf-dot normal"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Calcul personnalisé / machine</li>
+        <li class="plan-feature normal"><span class="pf-dot normal"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Support email 48h</li>
+        <li class="plan-feature normal"><span class="pf-dot normal"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Tableau de bord basique</li>
+      </ul>
+      <button class="btn-plan ghost" onclick="location.href='#cta'">Commencer</button>
+    </div>
+
+    <div class="plan hi" data-a="up" data-d="2" data-tilt>
+      <div class="plan-badge">Le plus populaire</div>
+      <p class="plan-range hi">6 à 19 ASIC</p>
+      <h3 class="plan-name hi">Pro</h3>
+      <div class="plan-fee hi">15%</div>
+      <p class="plan-fee-note hi">sur la production nette</p>
+      <div class="plan-div hi"></div>
+      <ul class="plan-features">
+        <li class="plan-feature hi"><span class="pf-dot hi"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Hébergement prioritaire Virunga</li>
+        <li class="plan-feature hi"><span class="pf-dot hi"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Newsletter mensuelle détaillée</li>
+        <li class="plan-feature hi"><span class="pf-dot hi"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Rapport machine par machine</li>
+        <li class="plan-feature hi"><span class="pf-dot hi"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>WhatsApp Thomas direct</li>
+        <li class="plan-feature hi"><span class="pf-dot hi"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Données Antpool temps réel</li>
+        <li class="plan-feature hi"><span class="pf-dot hi"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Tableau de bord avancé</li>
+      </ul>
+      <button class="btn-plan hi" onclick="location.href='#cta'">Le choix des investisseurs</button>
+    </div>
+
+    <div class="plan" data-a="up" data-d="3" data-tilt>
+      <p class="plan-range normal">20+ ASIC</p>
+      <h3 class="plan-name normal">Industriel</h3>
+      <div class="plan-fee normal" style="font-size:26px;padding-top:8px">Sur devis</div>
+      <p class="plan-fee-note normal">conditions personnalisées</p>
+      <div class="plan-div normal"></div>
+      <ul class="plan-features">
+        <li class="plan-feature normal"><span class="pf-dot normal"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Hébergement dédié</li>
+        <li class="plan-feature normal"><span class="pf-dot normal"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Reporting hebdomadaire</li>
+        <li class="plan-feature normal"><span class="pf-dot normal"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Ligne directe équipe terrain</li>
+        <li class="plan-feature normal"><span class="pf-dot normal"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Visite ferme RDC possible</li>
+        <li class="plan-feature normal"><span class="pf-dot normal"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Dashboard sur mesure</li>
+        <li class="plan-feature normal"><span class="pf-dot normal"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Contrat cadre personnalisé</li>
+      </ul>
+      <button class="btn-plan normal" onclick="location.href='#cta'">Discutons ensemble</button>
+    </div>
+
+  </div>
+  <p style="text-align:center;margin-top:24px;font-size:13px;color:var(--dim)" data-a="fade" data-d="4">Mois négatif = 0 € dû. Gwensas absorbe l'écart. Aucune dette client, jamais.</p>
+</section>
+
+<!-- TRANSPARENCY -->
+<section id="transp">
+  <div class="section-header" data-a="up" style="margin-bottom:40px">
+    <p class="s-tag">Transparence</p>
+    <h2 class="s-h">Rien à cacher.</h2>
+    <p class="s-sub">Voici exactement comment votre versement est calculé chaque mois.</p>
+  </div>
+  <div class="formula-wrap" data-a="up" data-d="1">
+    <p class="formula-tag">Formule publique — vérifiable en temps réel via Antpool</p>
+    <div class="formula-code">
+      Production BTC = <span class="f-hl">Hashrate</span> × (1 − frais pool) × <span class="f-hl">récompense bloc</span> ÷ 2³² ÷ <span class="f-hl">difficulté réseau</span>
+      <div class="formula-div"></div>
+      <div class="f-result">Versement client = (Production BTC − coût élec en BTC) × <span>85%</span></div>
+    </div>
+    <div class="formula-params">
+      <div class="fp"><div class="fp-lbl">Pool</div><div class="fp-val">Antpool · ~1%</div></div>
+      <div class="fp"><div class="fp-lbl">Récompense bloc</div><div class="fp-val">3,125 BTC (2024)</div></div>
+      <div class="fp"><div class="fp-lbl">Électricité</div><div class="fp-val">0,047 €/kWh → BTC</div></div>
+      <div class="fp"><div class="fp-lbl">Frais Gwensas</div><div class="fp-val">15% sur net</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-header" data-a="up" style="margin-bottom:44px">
+    <p class="s-tag">FAQ</p>
+    <h2 class="s-h">Questions directes.</h2>
+    <p class="s-sub">Sans langue de bois — comme on le fait depuis 2017.</p>
+  </div>
+  <div class="faq-list" data-a="up" data-d="1">
+    <div class="faq-item"><button class="faq-q"><span class="faq-q-txt">Suis-je vraiment propriétaire de la machine ?</span><span class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button><div class="faq-body"><p>Oui, intégralement. Après achat et paiement, la machine vous appartient avec garantie fabricant 1 an. Vous contrôlez la stratégie, pouvez demander une relocalisation ou la vente. Les Bitcoin produits vous reviennent après déduction des frais convenus.</p></div></div>
+    <div class="faq-item"><button class="faq-q"><span class="faq-q-txt">Que se passe-t-il si ma machine est déficitaire ?</span><span class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button><div class="faq-body"><p>Si la production brute ne couvre pas le coût de l'électricité, le versement est nul. Gwensas absorbe l'écart résiduel. Ce déficit n'est jamais reporté sur les mois suivants — vous ne devez rien. C'est une garantie contractuelle.</p></div></div>
+    <div class="faq-item"><button class="faq-q"><span class="faq-q-txt">Combien de temps avant mon premier Bitcoin ?</span><span class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button><div class="faq-body"><p>De la commande à l'activation, comptez 3 à 4 semaines (transport, dédouanement, installation, configuration). Le premier versement intervient au cycle mensuel suivant, entre le 5 et le 10 du mois.</p></div></div>
+    <div class="faq-item"><button class="faq-q"><span class="faq-q-txt">Pourquoi produire plutôt qu'acheter du Bitcoin ?</span><span class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button><div class="faq-body"><p>Quand vous achetez du Bitcoin, vous payez le cours du marché. Quand vous le produisez à 0,047 €/kWh, votre coût de revient peut être structurellement inférieur — surtout en phase de hausse. Vous construisez une position long terme avec moins d'exposition à la volatilité court-terme.</p></div></div>
+    <div class="faq-item"><button class="faq-q"><span class="faq-q-txt">Est-ce sans risque ?</span><span class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button><div class="faq-body"><p>Non, et quiconque prétend le contraire n'est pas sincère. Les résultats dépendent du cours BTC, de la difficulté réseau et des coûts opérationnels. Gwensas s'engage sur l'uptime et la transparence — pas sur les prix. Ne mettez jamais en jeu des sommes que vous ne pouvez pas vous permettre de perdre.</p></div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-bg-txt">GWENSAS</div>
+  <div class="cta-inner">
+    <p class="cta-tag" data-a="fade">Rejoindre Gwensas</p>
+    <h2 class="cta-h" data-a="up" data-d="1">Prêt à produire votre premier Bitcoin ?</h2>
+    <p class="cta-sub" data-a="up" data-d="2">Capacité limitée. Première réponse sous 24h.</p>
+    <div class="cta-btns" data-a="up" data-d="3">
+      <a href="mailto:contact@gwensas.com" class="btn-cta-white">
+        contact@gwensas.com
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <a href="https://wa.me/33782688214" target="_blank" rel="noopener noreferrer" class="btn-cta-out">WhatsApp Thomas</a>
+    </div>
+    <div class="cta-info" data-a="fade" data-d="4">
+      <div class="ci"><div class="ci-dot"></div><span class="ci-txt">SIREN 829 251 644</span></div>
+      <div class="ci"><div class="ci-dot"></div><span class="ci-txt">Bordeaux, France</span></div>
+      <div class="ci"><div class="ci-dot"></div><span class="ci-txt">Virunga · RDC · Inga</span></div>
+      <div class="ci"><div class="ci-dot"></div><span class="ci-txt">Antpool · 1% frais</span></div>
+    </div>
+  </div>
+</section>
+
+</main>
+<!-- FOOTER -->
+<footer id="foot">
+  <div class="foot-l">
+    <!-- Logo Gwensas — couleurs inversées pour fond sombre -->
+    <svg height="28" viewBox="0 0 240.9 153.1" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Gwensas" style="display:block;width:auto">
+      <path fill="#009FE3" d="M79.5,93.8l-4.8-20.7L54.7,84.7l5.6,2v8.1c-1.3,0.6-2.7,1-4.2,1.2c-1.5,0.3-3.1,0.4-4.8,0.4c-2.9,0-5.5-0.5-7.7-1.4c-2.3-0.9-4.2-2.2-5.7-3.8c-1.5-1.6-2.7-3.6-3.5-5.9c-0.8-2.3-1.2-4.8-1.2-7.5c0-2.7,0.4-5.1,1.3-7.4c0.9-2.3,2.1-4.2,3.6-5.9c1.6-1.6,3.4-2.9,5.5-3.8c2.1-0.9,4.4-1.4,6.9-1.4c2.9,0,5.5,0.5,7.8,1.5c2.3,1,4.1,2.4,5.5,4l9-10.3c-2.5-2.4-5.8-4.3-9.8-5.7c-4-1.4-8.4-2.1-13-2.1c-4.5,0-8.7,0.7-12.6,2.2c-3.9,1.5-7.3,3.5-10.2,6.2c-2.9,2.7-5.2,6-6.8,9.8c-1.6,3.8-2.5,8.1-2.5,12.9c0,4.7,0.8,8.9,2.4,12.7c1.6,3.8,3.9,7.1,6.7,9.8c2.9,2.7,6.3,4.8,10.3,6.4c4,1.5,8.3,2.3,13.1,2.3c4.6,0,8.8-0.5,12.7-1.4c3.9-0.9,7.3-2.2,10.2-3.7V91.6L79.5,93.8z"/>
+      <polygon fill="rgba(255,255,255,0.55)" points="129.9,108.1 127.6,108.1 114,62.6 113.9,62.6 100.6,108.1 98.4,108.1 84.3,61.2 85.9,61.2 99.4,106.8 99.6,106.8 112.9,61.2 115.1,61.2 128.7,106.8 128.9,106.8 142.4,61.2 143.9,61.2"/>
+      <polygon fill="rgba(255,255,255,0.55)" points="152.8,108.1 152.8,61.2 180.1,61.2 180.1,62.6 154.2,62.6 154.2,83.1 178.6,83.1 178.6,84.5 154.2,84.5 154.2,106.8 181.1,106.8 181.1,108.1"/>
+      <polygon fill="rgba(255,255,255,0.55)" points="227.1,108.1 193.5,63.1 193.3,63.1 193.3,108.1 191.8,108.1 191.8,61.2 193.9,61.2 227.5,106.2 227.7,106.2 227.7,61.2 229.2,61.2 229.2,108.1"/>
+    </svg>
+  </div>
+  <p class="foot-legal">© 2024 Gwensas SAS · 14 rue Honoré Tessier, 33000 Bordeaux · SIREN 829 251 644 · Fondée en 2017</p>
+  <div class="foot-links">
+    <a href="#">CGV</a><a href="#">Mentions légales</a><a href="#">Confidentialité</a>
+  </div>
+</footer>
+
+<script>
+/* ── LOADING ───────────────────────────────────────────── */
+window.addEventListener('load', () => {
+  const ldr = document.getElementById('ldr');
+  setTimeout(() => { ldr.style.opacity = '0'; setTimeout(() => ldr.remove(), 400); }, 150);
+  initMiningCanvas();
+});
+
+/* ── MINING NETWORK CANVAS ─────────────────────────────── */
+function initMiningCanvas() {
+  const canvas = document.getElementById('hero-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, nodes = [], hashes = [], btcSymbols = [];
+  let blockTimer = 0;
+
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize, { passive: true });
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  // Init ASIC miner nodes
+  function initNodes(n) {
+    nodes = [];
+    for (let i = 0; i < n; i++) {
+      nodes.push({
+        x: rand(0, W), y: rand(0, H),
+        vx: rand(-0.25, 0.25), vy: rand(-0.25, 0.25),
+        r: rand(2.5, 4),
+        phase: rand(0, Math.PI * 2),
+        speed: rand(0.02, 0.05),
+        active: Math.random() > 0.15,
+        hue: Math.random() > 0.85 ? '#F7931A' : '#009FE3'
+      });
+    }
+  }
+  initNodes(28);
+
+  // Spawn a rising hash particle
+  function spawnHash() {
+    if (Math.random() > 0.96) {
+      const chars = '0123456789abcdef';
+      hashes.push({
+        x: rand(W * 0.1, W * 0.9),
+        y: H + 10,
+        text: Array.from({length: rand(8,12)|0}, () => chars[Math.random()*16|0]).join(''),
+        speed: rand(0.4, 1.1),
+        opacity: rand(0.4, 0.8),
+        size: rand(9, 13)
+      });
+    }
+  }
+
+  // Spawn BTC symbol
+  function spawnBtc() {
+    if (Math.random() > 0.994) {
+      btcSymbols.push({ x: rand(W*0.1, W*0.9), y: H+20, speed: rand(0.3, 0.7), opacity: 0.7, size: rand(14,22) });
+    }
+  }
+
+  function draw(ts) {
+    ctx.clearRect(0, 0, W, H);
+    blockTimer++;
+
+    // ── Connections between nearby nodes ──
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const a = nodes[i], b = nodes[j];
+        const dx = a.x - b.x, dy = a.y - b.y;
+        const d = Math.sqrt(dx*dx + dy*dy);
+        if (d < 170) {
+          const alpha = (1 - d/170) * 0.18;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = `rgba(0,159,227,${alpha})`;
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+          // Animated data packet along connection
+          if (Math.random() > 0.998) {
+            const prog = (ts * 0.001 * 0.5) % 1;
+            ctx.beginPath();
+            ctx.arc(a.x + dx * prog * -1, a.y + dy * prog * -1, 1.5, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(0,159,227,0.9)`;
+            ctx.fill();
+          }
+        }
+      }
+    }
+
+    // ── Move and draw nodes ──
+    nodes.forEach(n => {
+      n.phase += n.speed;
+      n.x += n.vx; n.y += n.vy;
+      if (n.x < -10) n.x = W + 10;
+      if (n.x > W + 10) n.x = -10;
+      if (n.y < -10) n.y = H + 10;
+      if (n.y > H + 10) n.y = -10;
+
+      const glow = (Math.sin(n.phase) * 0.5 + 0.5);
+      const r = n.r + glow * 1.5;
+
+      // Glow halo
+      const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r * 5);
+      g.addColorStop(0, n.active ? `rgba(0,159,227,${0.25 * glow})` : 'rgba(0,100,180,0.08)');
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.arc(n.x, n.y, r * 5, 0, Math.PI * 2);
+      ctx.fillStyle = g; ctx.fill();
+
+      // Core dot
+      ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = n.active
+        ? (n.hue === '#F7931A' ? `rgba(247,147,26,${0.7 + 0.3*glow})` : `rgba(0,159,227,${0.6 + 0.4*glow})`)
+        : 'rgba(0,80,140,0.35)';
+      ctx.fill();
+    });
+
+    // ── "Block found" event every ~400 frames ──
+    if (blockTimer % 400 === 0) {
+      const lucky = nodes[Math.floor(Math.random() * nodes.length)];
+      const ring = ctx.createRadialGradient(lucky.x, lucky.y, 0, lucky.x, lucky.y, 60);
+      ring.addColorStop(0, 'rgba(247,147,26,0.5)');
+      ring.addColorStop(1, 'rgba(247,147,26,0)');
+      ctx.beginPath(); ctx.arc(lucky.x, lucky.y, 60, 0, Math.PI * 2);
+      ctx.fillStyle = ring; ctx.fill();
+    }
+
+    // ── Hash particles rising ──
+    spawnHash(); spawnBtc();
+    ctx.font = '10px monospace';
+    hashes = hashes.filter(h => {
+      h.y -= h.speed; h.opacity -= 0.003;
+      if (h.opacity <= 0) return false;
+      ctx.font = `${h.size}px monospace`;
+      ctx.fillStyle = `rgba(0,159,227,${h.opacity * 0.55})`;
+      ctx.fillText(h.text, h.x, h.y);
+      return true;
+    });
+
+    // ── BTC ₿ symbols rising ──
+    btcSymbols = btcSymbols.filter(b => {
+      b.y -= b.speed; b.opacity -= 0.004;
+      if (b.opacity <= 0) return false;
+      ctx.font = `bold ${b.size}px sans-serif`;
+      ctx.fillStyle = `rgba(247,147,26,${b.opacity * 0.6})`;
+      ctx.fillText('₿', b.x, b.y);
+      return true;
+    });
+
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
+
+/* ── NAV SCROLL + SCROLL SPY ──────────────────────────── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('sc', window.scrollY > 30);
+}, { passive: true });
+
+/* Scroll spy — active nav link */
+const navLinks = document.querySelectorAll('.nav-mid a[href^="#"]');
+const sections = [...navLinks].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+const spyObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove('active'));
+      const link = document.querySelector(`.nav-mid a[href="#${entry.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { threshold: 0.3, rootMargin: '-20% 0px -60% 0px' });
+sections.forEach(s => spyObserver.observe(s));
+
+/* ── PARALLAX HERO ─────────────────────────────────────── */
+const heroImg = document.getElementById('hero-img');
+window.addEventListener('scroll', () => {
+  if (heroImg && window.scrollY < window.innerHeight) {
+    heroImg.style.transform = `scale(1.05) translateY(${window.scrollY * 0.15}px)`;
+  }
+}, { passive: true });
+
+/* ── LIVE MARKET DATA ──────────────────────────────────── */
+const fmtNum = (n, dec = 0) => new Intl.NumberFormat('fr-FR', { minimumFractionDigits: dec, maximumFractionDigits: dec }).format(n);
+let btcPrice = 88000, difficulty = 108.5, hashrate = 760;
+let btcChange = 0;
+
+function buildTicker() {
+  const energyGW = (hashrate * 1e6 * 17.23 / 1e9).toFixed(1); // 17.23 W/TH avg efficiency
+
+  // SVG icons
+  const iconBTC = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><circle cx="12" cy="12" r="10" fill="rgba(247,147,26,.2)" stroke="#F7931A" stroke-width="1.2"/><text x="12" y="16" text-anchor="middle" fill="#F7931A" font-weight="700" font-size="11" font-family="sans-serif">₿</text></svg>`;
+
+  const iconDiff = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><polygon points="12,2 22,7 22,17 12,22 2,17 2,7" stroke="#009FE3" stroke-width="1.2" fill="rgba(0,159,227,.12)"/><line x1="12" y1="8" x2="12" y2="16" stroke="#009FE3" stroke-width="1.5"/><line x1="8" y1="12" x2="16" y2="12" stroke="#009FE3" stroke-width="1.5"/></svg>`;
+
+  const iconHash = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M13 2L4 14h7l-2 8 9-12h-7l2-8z" fill="rgba(0,159,227,.18)" stroke="#009FE3" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
+
+  const iconEnergy = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><circle cx="12" cy="12" r="9" fill="rgba(16,185,129,.12)" stroke="#10B981" stroke-width="1.1"/><ellipse cx="12" cy="12" rx="4" ry="9" stroke="rgba(16,185,129,.35)" stroke-width="0.8" fill="none"/><line x1="3" y1="12" x2="21" y2="12" stroke="rgba(16,185,129,.35)" stroke-width="0.8"/><path d="M14 7l-4 5h4l-4 5" stroke="#F7931A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+  // Mini sparkline SVG (directional indicator)
+  const sparkBTC = btcChange >= 0
+    ? `<svg width="40" height="18" viewBox="0 0 40 18"><defs><linearGradient id="gu" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4ade80" stop-opacity="0.3"/><stop offset="100%" stop-color="#4ade80" stop-opacity="0"/></linearGradient></defs><path d="M0,16 C5,12 10,10 16,8 C22,6 28,4 40,1" stroke="#4ade80" stroke-width="1.5" fill="none"/><path d="M0,16 C5,12 10,10 16,8 C22,6 28,4 40,1 V18 H0 Z" fill="url(#gu)"/></svg>`
+    : `<svg width="40" height="18" viewBox="0 0 40 18"><defs><linearGradient id="gd" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f87171" stop-opacity="0.3"/><stop offset="100%" stop-color="#f87171" stop-opacity="0"/></linearGradient></defs><path d="M0,2 C8,4 16,8 24,12 C30,15 36,16 40,17" stroke="#f87171" stroke-width="1.5" fill="none"/><path d="M0,2 C8,4 16,8 24,12 C30,15 36,16 40,17 V18 H0 Z" fill="url(#gd)"/></svg>`;
+
+  const sparkDiff = `<svg width="40" height="18" viewBox="0 0 40 18"><defs><linearGradient id="gdf" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#009FE3" stop-opacity="0.25"/><stop offset="100%" stop-color="#009FE3" stop-opacity="0"/></linearGradient></defs><path d="M0,14 C6,11 12,9 20,7 C28,5 34,4 40,3" stroke="#009FE3" stroke-width="1.5" fill="none"/><path d="M0,14 C6,11 12,9 20,7 C28,5 34,4 40,3 V18 H0 Z" fill="url(#gdf)"/></svg>`;
+  const sparkHash = `<svg width="40" height="18" viewBox="0 0 40 18"><defs><linearGradient id="ghs" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#009FE3" stop-opacity="0.25"/><stop offset="100%" stop-color="#009FE3" stop-opacity="0"/></linearGradient></defs><path d="M0,15 C5,12 12,10 18,7 C26,4 32,3 40,2" stroke="#009FE3" stroke-width="1.5" fill="none"/><path d="M0,15 C5,12 12,10 18,7 C26,4 32,3 40,2 V18 H0 Z" fill="url(#ghs)"/></svg>`;
+
+  const changeColor = btcChange >= 0 ? '#4ade80' : '#f87171';
+  const changeArrow = btcChange >= 0 ? '▲' : '▼';
+
+  const items = [
+    `<span class="tk-brand">GWENSAS</span>`,
+    `<a class="tk-item" href="https://www.coingecko.com/en/coins/bitcoin" target="_blank" rel="noopener" title="Voir sur CoinGecko">${iconBTC}<span class="tk-label">BTC/EUR</span><span class="tk-val ${btcChange >= 0 ? 'up' : 'dn'}">${fmtNum(btcPrice)} €</span>${btcChange !== 0 ? `<span class="tk-chg" style="color:${changeColor}">${changeArrow}${Math.abs(btcChange).toFixed(1)}%</span>` : ''}${sparkBTC}<span class="tk-ext">↗</span></a>`,
+    `<div class="tk-sep"></div>`,
+    `<a class="tk-item" href="https://www.blockchain.com/explorer/charts/difficulty" target="_blank" rel="noopener" title="Difficulté réseau Bitcoin">${iconDiff}<span class="tk-label">Difficulté</span><span class="tk-val">${difficulty.toFixed(1)} T</span>${sparkDiff}<span class="tk-ext">↗</span></a>`,
+    `<div class="tk-sep"></div>`,
+    `<a class="tk-item" href="https://www.blockchain.com/explorer/charts/hash-rate" target="_blank" rel="noopener" title="Hashrate réseau mondial">${iconHash}<span class="tk-label">Hashrate</span><span class="tk-val">${fmtNum(hashrate)} EH/s</span>${sparkHash}<span class="tk-ext">↗</span></a>`,
+    `<div class="tk-sep"></div>`,
+    `<a class="tk-item" href="https://mempool.space" target="_blank" rel="noopener" title="Estimation: hashrate × 17,23 W/TH (efficacité moy. ASIC)">${iconEnergy}<span class="tk-label">Énergie mondiale</span><span class="tk-val">${energyGW} GW</span><span class="tk-chg" style="color:rgba(255,255,255,.35);font-size:9px">≈17,23 W/TH</span><span class="tk-ext">↗</span></a>`,
+    `<div class="tk-sep"></div>`,
+  ].join('');
+  const track = document.getElementById('tk-track');
+  if (track) track.innerHTML = items + items;
+}
+
+function fetchAll() {
+  // BTC price + 24h change
+  fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur&include_24hr_change=true')
+    .then(r => r.json()).then(d => {
+      btcPrice = Math.round(d.bitcoin.eur);
+      btcChange = d.bitcoin.eur_24h_change || 0;
+      buildTicker();
+    }).catch(() => {});
+
+  // Difficulty
+  fetch('https://blockchain.info/q/getdifficulty')
+    .then(r => r.text()).then(t => {
+      difficulty = parseFloat(t) / 1e12;
+      buildTicker();
+    }).catch(() => {});
+
+  // Hashrate (GH/s → EH/s)
+  fetch('https://blockchain.info/q/hashrate')
+    .then(r => r.text()).then(t => {
+      hashrate = Math.round(parseFloat(t) / 1e9);
+      buildTicker();
+    }).catch(() => {});
+}
+
+buildTicker(); // Show immediately with defaults
+fetchAll();
+setInterval(fetchAll, 60000);
+
+/* ── COUNTER ANIMATION ─────────────────────────────────── */
+const startedCounters = new WeakSet();
+function animateCounter(el) {
+  if (startedCounters.has(el)) return;
+  startedCounters.add(el);
+  const target = parseInt(el.dataset.count);
+  const suffix = el.dataset.suffix || '';
+  const dur = 1500;
+  let start = null;
+  const step = ts => {
+    if (!start) start = ts;
+    const p = Math.min((ts - start) / dur, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(e * target) + suffix;
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+/* ── INTERSECTION OBSERVER ─────────────────────────────── */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    entry.target.classList.add('on');
+    entry.target.querySelectorAll('[data-count]').forEach(animateCounter);
+    io.unobserve(entry.target);
+  });
+}, { threshold: 0.08, rootMargin: '-40px' });
+
+document.querySelectorAll('[data-a]').forEach(el => io.observe(el));
+
+// Hero counters on load
+setTimeout(() => {
+  document.querySelectorAll('.hero-stats [data-count], .kpi-grid [data-count]').forEach(animateCounter);
+}, 900);
+
+/* ── FAQ ACCORDION ─────────────────────────────────────── */
+document.querySelectorAll('.faq-item').forEach(item => {
+  item.querySelector('.faq-q').addEventListener('click', () => {
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.faq-body').style.maxHeight = '0';
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      item.querySelector('.faq-body').style.maxHeight = item.querySelector('.faq-body').scrollHeight + 'px';
+    }
+  });
+});
+
+/* ── 3D TILT EFFECT ON CARDS ───────────────────────────── */
+document.querySelectorAll('[data-tilt]').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transition = 'transform .08s ease, box-shadow .25s, border-color .25s';
+    card.style.transform = `perspective(800px) rotateX(${-y * 7}deg) rotateY(${x * 7}deg) translateY(-6px)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transition = 'transform .4s var(--ease), box-shadow .25s, border-color .25s';
+    card.style.transform = '';
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "gwensas-landing",
+  "version": "1.0.0",
+  "description": "Gwensas — Bitcoin Mining as a Service",
+  "scripts": {
+    "dev": "npx serve . -p 3000 --no-clipboard",
+    "build": "echo 'Static site — no build needed'",
+    "start": "npx serve . -p 3000"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}
