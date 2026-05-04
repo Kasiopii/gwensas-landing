@@ -11,7 +11,7 @@ Fermes hydroélectriques au Parc des Virunga, RDC. 0,047 €/kWh. 7 ans d'expér
 
 ## Règles design ABSOLUES
 
-- **Police** : Inter uniquement (headings + body) — même esthétique que X.com
+- **Polices** : Bricolage Grotesque (titres, KPI, stats) + DM Sans (body, UI, captions) — voir DESIGN.md pour l'échelle complète
 - **Boutons** : toujours pill shape (`border-radius: 100px`) — jamais carré
 - **Glassmorphism** : toutes les cards ont `backdrop-filter: blur()` + `-webkit-backdrop-filter`
 - **Fond hero** : toujours sombre (`#06101e`) — textes blancs sur hero

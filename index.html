@@ -7,7 +7,7 @@
 <meta name="description" content="Gwensas héberge vos ASIC Bitcoin dans le Parc des Virunga, RDC - énergie hydroélectrique à 0,047 €/kWh. Transparence totale."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet"/>
 <style>
 /* ── TOKENS ─────────────────────────────────── */
 :root{
@@ -22,7 +22,12 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;font-size:16px}
-body{background:var(--white);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{background:var(--white);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,h5,h6,.font-display,
+.hero-h1,.section-h,.kpi-headline,.kpi-stat-val,.kpi-bar-val,.h-stat-val,
+.vir-h,.vir-stat-val,.impact-h,.icard-name,.calc-result-val,.calc-mini-val,
+.plan-name,.plan-fee,.cta-h,.loc-h,.tt-name,.tt-val,.how-step h3,.how-img-caption h4,
+.val-h{font-family:'Bricolage Grotesque',sans-serif;letter-spacing:-.025em}
 a{text-decoration:none;color:inherit}
 button{font-family:inherit;cursor:pointer;border:none;background:none}
 img{display:block;max-width:100%}
@@ -253,7 +258,7 @@ a,button{touch-action:manipulation}
 .calc-slider{width:100%;appearance:none;height:3px;background:rgba(255,255,255,.1);border-radius:2px;outline:none;cursor:pointer}
 .calc-slider::-webkit-slider-thumb{appearance:none;width:20px;height:20px;border-radius:50%;background:var(--blue);cursor:pointer;box-shadow:0 0 0 4px rgba(0,159,227,.18)}
 .calc-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--blue);cursor:pointer;border:none;box-shadow:0 0 0 4px rgba(0,159,227,.18)}
-.calc-select{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(0,159,227,.18);border-radius:12px;padding:12px 16px;color:#fff;font-size:14px;font-family:'Inter',sans-serif;font-weight:500;cursor:pointer;outline:none;appearance:none}
+.calc-select{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(0,159,227,.18);border-radius:12px;padding:12px 16px;color:#fff;font-size:14px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;outline:none;appearance:none}
 .calc-select option{background:#0a1628}
 .calc-results-title{font-size:10.5px;font-weight:700;color:rgba(255,255,255,.35);letter-spacing:.14em;text-transform:uppercase;margin-bottom:24px}
 .calc-result-main{text-align:center;padding:28px;border-radius:16px;background:rgba(0,159,227,.08);border:1px solid rgba(0,159,227,.15);margin-bottom:18px}
@@ -268,7 +273,7 @@ a,button{touch-action:manipulation}
 .calc-disclaimer{font-size:11px;color:rgba(255,255,255,.2);line-height:1.6;text-align:center;padding-top:14px;border-top:1px solid rgba(255,255,255,.05)}
 .calc-cta-btn{width:100%;padding:14px;border-radius:100px;background:linear-gradient(135deg,var(--blue),var(--blue-x));color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;margin-top:14px;display:block;text-align:center;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 16px rgba(0,159,227,.35)}
 .calc-cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,159,227,.5)}
-.calc-formula-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:24px;font-family:'Inter',monospace;font-size:12.5px;line-height:2.2;color:rgba(255,255,255,.45);margin-top:32px}
+.calc-formula-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:24px;font-family:ui-monospace,'JetBrains Mono',monospace;font-size:12.5px;line-height:2.2;color:rgba(255,255,255,.45);margin-top:32px}
 .cf-hl{color:var(--blue);font-weight:700}
 .cf-hl2{color:var(--green);font-weight:600}
 .cf-hl3{color:var(--orange);font-weight:600}
@@ -314,7 +319,7 @@ a,button{touch-action:manipulation}
 #transp{background:var(--white);padding:100px 72px;min-height:auto;flex-direction:column;align-items:center}
 .formula-card{background:rgba(245,248,251,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(0,159,227,.1);border-radius:24px;padding:48px;box-shadow:0 4px 24px rgba(0,41,74,.05),inset 0 1px 0 rgba(255,255,255,.9);max-width:900px;width:100%;margin-top:48px}
 .formula-eyebrow{font-size:10px;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:10px}
-.formula-code{font-family:'Inter',monospace;font-size:13.5px;line-height:2.1;color:var(--navy);background:#fff;border:1px solid var(--off2);border-radius:12px;padding:24px 28px;margin:20px 0;overflow-x:auto}
+.formula-code{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:13.5px;line-height:2.1;color:var(--navy);background:#fff;border:1px solid var(--off2);border-radius:12px;padding:24px 28px;margin:20px 0;overflow-x:auto}
 .f-hl{color:var(--blue);font-weight:700}
 .f-div{height:1px;background:var(--off2);margin:14px 0}
 .f-res span{color:var(--blue);font-weight:700}
@@ -328,7 +333,7 @@ a,button{touch-action:manipulation}
 .faq-inner{max-width:760px;width:100%;margin-top:48px}
 .faq-item{border-bottom:1px solid rgba(0,159,227,.08)}
 .faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;padding:22px 0;cursor:pointer;text-align:left;gap:16px;background:none;border:none}
-.faq-q-txt{font-weight:600;font-size:16px;color:var(--navy);line-height:1.4;font-family:'Inter',sans-serif}
+.faq-q-txt{font-weight:600;font-size:16px;color:var(--navy);line-height:1.4;font-family:'DM Sans',sans-serif}
 .faq-icon{width:28px;height:28px;border-radius:50%;background:var(--off2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s,transform .3s var(--ease)}
 .faq-item.open .faq-icon{background:var(--blue);transform:rotate(45deg)}
 .faq-body{max-height:0;overflow:hidden;transition:max-height .4s var(--ease2)}
