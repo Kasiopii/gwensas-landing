@@ -160,7 +160,7 @@ a,button{touch-action:manipulation}
 .kpi-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;width:100%;max-width:1100px}
 .kpi-stat{padding:28px 24px;border-radius:18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);text-align:center;transition:background .3s,border-color .3s}
 .kpi-stat:hover{background:rgba(0,159,227,.08);border-color:rgba(0,159,227,.25)}
-.kpi-stat-val{font-weight:900;font-size:clamp(1.8rem,3.5vw,2.8rem);color:#fff;letter-spacing:-.04em;display:block;margin-bottom:6px;font-variant-numeric:tabular-nums}
+.kpi-stat-val{font-weight:800;font-size:clamp(1.8rem,3.5vw,2.8rem);color:#fff;letter-spacing:-.04em;display:block;margin-bottom:6px;font-variant-numeric:tabular-nums}
 .kpi-stat-val.accent{color:var(--blue)}
 .kpi-stat-lbl{font-size:10.5px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:.12em;font-weight:600;display:block}
 .kpi-stat-sub{font-size:11px;color:rgba(255,255,255,.22);margin-top:5px;line-height:1.4}
@@ -234,7 +234,7 @@ a,button{touch-action:manipulation}
 .how-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;width:100%;max-width:1100px}
 .how-step{padding:36px 28px;border-radius:22px;background:var(--off);border:1px solid var(--off2);position:relative;overflow:hidden;transition:transform .3s var(--ease),box-shadow .3s,border-color .3s}
 .how-step:hover{transform:translateY(-8px);box-shadow:0 24px 56px rgba(0,159,227,.1);border-color:rgba(0,159,227,.2)}
-.how-step::before{content:attr(data-num);position:absolute;top:-10px;right:16px;font-weight:900;font-size:7rem;color:rgba(0,159,227,.06);letter-spacing:-.05em;line-height:1;pointer-events:none}
+.how-step::before{content:attr(data-num);position:absolute;top:-10px;right:16px;font-weight:800;font-size:7rem;color:rgba(0,159,227,.06);letter-spacing:-.05em;line-height:1;pointer-events:none}
 .how-step-num{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-x));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;margin-bottom:24px;box-shadow:0 0 0 8px rgba(0,159,227,.1)}
 .how-step h3{font-weight:700;font-size:18px;color:var(--navy);margin-bottom:10px;letter-spacing:-.01em}
 .how-step p{font-size:14px;color:var(--mid);line-height:1.72}
@@ -262,7 +262,7 @@ a,button{touch-action:manipulation}
 .calc-select option{background:#0a1628}
 .calc-results-title{font-size:10.5px;font-weight:700;color:rgba(255,255,255,.35);letter-spacing:.14em;text-transform:uppercase;margin-bottom:24px}
 .calc-result-main{text-align:center;padding:28px;border-radius:16px;background:rgba(0,159,227,.08);border:1px solid rgba(0,159,227,.15);margin-bottom:18px}
-.calc-result-val{font-weight:900;font-size:46px;color:var(--blue);letter-spacing:-.05em;line-height:1;font-variant-numeric:tabular-nums}
+.calc-result-val{font-weight:800;font-size:46px;color:var(--blue);letter-spacing:-.05em;line-height:1;font-variant-numeric:tabular-nums}
 .calc-result-unit{font-size:14px;color:rgba(255,255,255,.3);margin-top:6px;font-weight:500}
 .calc-result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
 .calc-mini{padding:16px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);text-align:center}
@@ -296,7 +296,7 @@ a,button{touch-action:manipulation}
 .plan.featured .plan-tier{color:rgba(255,255,255,.45)}
 .plan-name{font-weight:800;font-size:22px;letter-spacing:-.025em;color:var(--navy);margin-bottom:20px}
 .plan.featured .plan-name{color:#fff}
-.plan-fee{font-weight:900;font-size:50px;letter-spacing:-.05em;line-height:1;color:var(--navy)}
+.plan-fee{font-weight:800;font-size:50px;letter-spacing:-.05em;line-height:1;color:var(--navy)}
 .plan.featured .plan-fee{color:#fff}
 .plan-fee-note{font-size:13px;color:var(--dim);margin-top:4px;margin-bottom:26px}
 .plan.featured .plan-fee-note{color:rgba(255,255,255,.45)}
@@ -355,7 +355,7 @@ a,button{touch-action:manipulation}
 #foot{background:#010810;padding:22px 52px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid rgba(0,159,227,.06)}
 .foot-brand{display:flex;align-items:center;gap:10px}
 .foot-mark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--blue),var(--blue-x));display:flex;align-items:center;justify-content:center}
-.foot-mark span{font-weight:900;color:#fff;font-size:10px}
+.foot-mark span{font-weight:800;color:#fff;font-size:10px}
 .foot-name{font-weight:700;font-size:13px;color:rgba(255,255,255,.55)}
 .foot-legal{font-size:10.5px;color:rgba(255,255,255,.25)}
 .foot-links{display:flex;gap:18px}
@@ -1148,7 +1148,7 @@ window.addEventListener('load',()=>{
       // Text labels
       if(prog<.52){
         ctx.save();ctx.textAlign='center';
-        ctx.font=`700 ${13+prog*9}px Inter,sans-serif`;
+        ctx.font=`700 ${13+prog*9}px "Bricolage Grotesque",sans-serif`;
         ctx.fillStyle=`rgba(247,147,26,${(.52-prog)*1.92})`;
         ctx.fillText('₿ Block Found',pn.x,pn.y-22-prog*24);
         ctx.font='500 9px monospace';
@@ -1162,7 +1162,7 @@ window.addEventListener('load',()=>{
     // Floating ₿ symbols
     btcSyms.forEach(s=>{
       ctx.save();ctx.globalAlpha=s.life*.65;
-      ctx.font=`700 ${s.size}px Inter,sans-serif`;
+      ctx.font=`700 ${s.size}px "Bricolage Grotesque",sans-serif`;
       ctx.fillStyle=s.orange?'#F7931A':'#009FE3';
       ctx.textAlign='center';ctx.fillText('₿',s.x,s.y);
       ctx.restore();
@@ -1561,7 +1561,7 @@ calcUpdate();
       /* Label on hover - also draw small name at all times */
       var lblScale=Math.max(0.7,W/1200);
       ctx.save();
-      ctx.font='600 '+(11*lblScale)+'px Inter,sans-serif';
+      ctx.font='600 '+(11*lblScale)+'px "DM Sans",sans-serif';
       ctx.textAlign='center';
       var txtW=ctx.measureText(loc.name).width+16;
       var lblY=y-dotR-stemH-14;
