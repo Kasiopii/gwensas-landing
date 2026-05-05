@@ -233,7 +233,7 @@ a,button{touch-action:manipulation}
 .how-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:64px;flex-wrap:wrap;gap:24px;width:100%;max-width:1100px}
 .how-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;width:100%;max-width:1100px}
 .how-step{padding:36px 28px;border-radius:22px;background:var(--off);border:1px solid var(--off2);position:relative;overflow:hidden;transition:transform .3s var(--ease),box-shadow .3s,border-color .3s}
-.how-step:hover{transform:translateY(-8px);box-shadow:0 24px 56px rgba(0,159,227,.1);border-color:rgba(0,159,227,.2)}
+.how-step:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,159,227,.08);border-color:rgba(0,159,227,.2)}
 .how-step::before{content:attr(data-num);position:absolute;top:-10px;right:16px;font-weight:800;font-size:7rem;color:rgba(0,159,227,.06);letter-spacing:-.05em;line-height:1;pointer-events:none}
 .how-step-num{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-x));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;margin-bottom:24px;box-shadow:0 0 0 8px rgba(0,159,227,.1)}
 .how-step h3{font-weight:700;font-size:18px;color:var(--navy);margin-bottom:10px;letter-spacing:-.01em}
@@ -288,7 +288,7 @@ a,button{touch-action:manipulation}
 #pricing{background:var(--off);padding:100px 72px;min-height:auto;flex-direction:column;align-items:center}
 .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1040px;width:100%;margin-top:56px}
 .plan{border-radius:24px;padding:34px 28px;display:flex;flex-direction:column;background:var(--white);border:1px solid var(--off2);box-shadow:0 2px 12px rgba(0,41,74,.04);position:relative;transition:transform .3s var(--ease),box-shadow .3s,border-color .3s}
-.plan:hover{transform:translateY(-8px);box-shadow:0 24px 56px rgba(0,159,227,.14);border-color:rgba(0,159,227,.25)}
+.plan:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,159,227,.10);border-color:rgba(0,159,227,.25)}
 .plan.featured{background:linear-gradient(145deg,rgba(0,90,175,.68),rgba(0,45,120,.55));border-color:rgba(0,159,227,.4);box-shadow:0 8px 32px rgba(0,159,227,.28)}
 .plan.featured:hover{box-shadow:0 24px 56px rgba(0,159,227,.4)}
 .plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);padding:4px 18px;border-radius:100px;background:var(--navy);font-weight:700;font-size:10px;color:#fff;white-space:nowrap;letter-spacing:.06em;text-transform:uppercase}
@@ -340,7 +340,7 @@ a,button{touch-action:manipulation}
 .faq-body p{font-size:14.5px;color:var(--mid);line-height:1.78;padding-bottom:22px}
 
 /* ── SECTION 10: CTA (DARK) ─────────────────── */
-#cta{background:linear-gradient(135deg,var(--navy) 0%,#001c38 45%,var(--navy2) 100%);background-size:200% 200%;animation:gradFlow 10s ease infinite}
+#cta{background:linear-gradient(135deg,var(--navy) 0%,#001c38 45%,var(--navy2) 100%)}
 .cta-dots{position:absolute;inset:0;background-image:radial-gradient(rgba(0,159,227,.07) 1px,transparent 1px);background-size:30px 30px;pointer-events:none}
 .cta-glow{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,159,227,.1) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
 .cta-content{position:relative;z-index:1;text-align:center;max-width:680px;padding:0 40px}
@@ -483,11 +483,6 @@ a,button{touch-action:manipulation}
   <div class="hero-content">
     <h1 class="hero-h1">Produisez vos <em>Bitcoin</em>.<br>Ne les achetez plus.</h1>
     <p class="hero-sub">Énergie hydroélectrique à <strong>0,047 €/kWh</strong> dans le Parc des Virunga. De l'ASIC à l'hébergement, on s'occupe de tout.</p>
-    <div class="hero-stats">
-      <div class="h-stat"><div class="h-stat-val" data-count="5" data-suffix="+ MW">0</div><div class="h-stat-lbl">Puissance</div></div>
-      <div class="h-stat"><div class="h-stat-val" data-count="9" data-suffix="+ ans">0</div><div class="h-stat-lbl">Expérience</div></div>
-      <div class="h-stat"><div class="h-stat-val" data-count="100" data-suffix="+">0</div><div class="h-stat-lbl">Clients actifs</div></div>
-    </div>
   </div>
   
   <div class="section-cta-bar centered">
